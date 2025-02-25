@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from "react";
 import Link from "next/link";
 import AppBar from "@mui/material/AppBar";
@@ -27,8 +28,8 @@ export const Navigation = () => {
     //{ label: "UserServer", href: "/users-server" },
     { label: "FAQ", href: "/faq" },
     { label: "Contact", href: "/contact" },
-    { label: "sign up", href: "/" },
-    { label: "login", href: "/sensitive" },
+    { label: "sign up", href: "/signup" },
+    { label: "login", href: "/login" },
   ];
 
   return (
@@ -49,8 +50,9 @@ export const Navigation = () => {
   
 </Typography>
 
+
         <Typography variant="h6" component="div" >
-     
+
         </Typography>
         <IconButton
           edge="start"

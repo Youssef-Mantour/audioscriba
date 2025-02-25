@@ -1,29 +1,26 @@
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import GitHubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions = {
   providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        username: { label: "Username", type: "text" },
-        password: { label: "Password", type: "password" },
-      },
-      authorize(credentials) {
-        if (credentials.username === "umann" && credentials.password === "1971") {
-          return { id: 1, name: "Admin User" }; // ✅ Authentication successful
-        }
-        return null; // ❌ Authentication failed
-      },
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    }),
+
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
-  pages: {
-    signIn: "/login",
+  secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async session({ session, token }) {
+      session.user.id = token.sub; // Add user ID to session
+      return session;
+    },
   },
-  session: {
-    strategy: "jwt",
-  },
-  secret: "supersecretkey", // Use env variable in production
 };
 
 const handler = NextAuth(authOptions);

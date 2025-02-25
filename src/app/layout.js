@@ -1,10 +1,11 @@
 "use client";
-
+import { SessionProvider } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
+import { Providers } from "./components/providers";
 import {
   CssBaseline,
   Container,
@@ -74,6 +75,8 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
+      <head><link rel="icon" href="/favicon.ico" sizes="any" /></head>
+      <Providers>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
@@ -119,6 +122,7 @@ export default function RootLayout({ children }) {
           
         </ThemeProvider>
       </body>
+      </Providers>
     </html>
   );
 }

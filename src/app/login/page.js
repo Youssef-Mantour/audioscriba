@@ -1,36 +1,26 @@
 "use client";
-import { signIn } from "next-auth/react";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 
-export default function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const router = useRouter();
+import { useSession, signIn, signOut } from "next-auth/react";
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    const result = await signIn("credentials", {
-      redirect: false,
-      username,
-      password,
-    });
-
-    if (result.ok) {
-      router.push("/sensitive"); // ✅ Redirect after login
-    } else {
-      alert("Invalid credentials!");
-    }
-  };
+export default function LoginPage() {
+  const { data: session } = useSession();
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
-        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-        <button type="submit">Login</button>
-      </form>
+    <div className="p-4">
+      <h1 className="text-xl font-bold">Authentication</h1>
+      {session ? (
+        <>
+          <p>Welcome, {session.user.name}!</p>
+          <p>Email: {session.user.email}</p>
+          <button onClick={() => signOut()} className="mt-2 px-4 py-2 bg-red-500 text-white rounded">
+            Sign Out
+          </button>
+        </>
+      ) : (
+        <button onClick={() => signIn()} className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
+          Sign In with Google/GitHub
+        </button>
+      )}
     </div>
   );
 }

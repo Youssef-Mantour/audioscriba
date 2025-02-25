@@ -6,21 +6,22 @@ import { Dancing_Script } from 'next/font/google';
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { TextField, Button, CircularProgress, Typography, Box, Grid, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from "@mui/material";
+import { Language } from '@mui/icons-material';
 
-const voices = ["Michael", "George", "Lewis", "Bella", "Emma", "Nicole", "Sarah", "Isabella", "Sky", "Adam"];
+const voices = ["Michael", "George", "sara", "Bella", "Emma", "Nicole", "Sarah", "Isabella", "Sky", "Adam"];
 const formats = ["mp3", "opus", "aac", "flac", "pcm", "wav"];
 const tinos = Dancing_Script({ subsets: ['latin'], weight: '700' });
-export default function Home() {
+
+export default function Audio() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [inputText, setInputText] = useState("");
   const [selectedVoice, setSelectedVoice] = useState("sarah");
   const [responseFormat, setResponseFormat] = useState("mp3");
   const [isClient, setIsClient] = useState(false);
+  const [audioUrl, setAudioUrl] = useState(null);
 
   const linkContainerRef = useRef(null);
-
-  
 
   useEffect(() => {
     setIsClient(true);
@@ -58,6 +59,7 @@ export default function Home() {
           input: inputText,
           voice: selectedVoice,
           response_format: responseFormat,
+          Language:"it",
         }),
       });
 
@@ -66,16 +68,8 @@ export default function Home() {
       }
 
       const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-
-      const link = document.createElement("a");
-      link.href = audioUrl;
-      link.download = `speech.${responseFormat}`;
-      link.textContent = "Click here to download your audio";
-
-      if (linkContainerRef.current) {
-        linkContainerRef.current.appendChild(link);
-      }
+      const url = URL.createObjectURL(audioBlob);
+      setAudioUrl(url);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -86,6 +80,7 @@ export default function Home() {
   if (!isClient) return null;
 
   return (
+   
     <Box sx={{ maxWidth: 960, mx: "auto", mt: 5, textAlign: "center" }}>
       <Typography 
       variant="h3" 
@@ -132,8 +127,6 @@ export default function Home() {
     Select Output Format
   </FormLabel>
   
-
-
   <RadioGroup
     value={responseFormat}
     onChange={handleFormatChange}
@@ -146,7 +139,6 @@ export default function Home() {
       </Box>
     ))}
   </RadioGroup>
-
       </FormControl>
    
       <Box ref={linkContainerRef} sx={{ mb: 3 }} />
@@ -172,6 +164,20 @@ export default function Home() {
           {loading ? <CircularProgress size={24} /> : "Generate Audio"}
         </Button>
       </Box>
+
+      {audioUrl && (
+        <Box sx={{ mt: 3 }}>
+          <h2>Audio</h2>
+          <audio controls>
+            <source src={audioUrl} type="audio/mp3" />
+            Your browser does not support the audio element.
+          </audio>
+          <Button variant="contained" color="secondary" href={audioUrl} download={`speech.${responseFormat}`} sx={{ ml: 2 }}>
+            Download
+          </Button>
+        </Box>
+      )}
     </Box>
+
   );
 }
