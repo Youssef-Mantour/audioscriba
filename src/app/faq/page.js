@@ -37,10 +37,7 @@ const faqs = [
     question: "Is there a free trial available?",
     answer: "Yes, we offer a free trial with limited features so you can test our service before committing."
   },
-  {
-    question: "What platforms can I use your service on?",
-    answer: "Our SaaS works on web browsers, and we also offer APIs for easy integration with mobile and desktop apps."
-  },
+  
   {
     question: "How do I contact support for issues?",
     answer: "You can reach our support team through email or live chat on our website for assistance."
