@@ -28,7 +28,6 @@ export const Navigation = () => {
     //{ label: "UserServer", href: "/users-server" },
     { label: "FAQ", href: "/faq" },
     { label: "Contact", href: "/contact" },
-    { label: "sign up", href: "/signup" },
     { label: "login", href: "/login" },
   ];
 
