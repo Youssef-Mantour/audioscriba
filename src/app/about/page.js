@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react"
 
-
+// this is the component
 import { redirect } from "next/navigation";
 export default  function about(){
     
