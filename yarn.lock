@@ -868,10 +868,10 @@ dunder-proto@^1.0.1:
     es-errors "^1.3.0"
     gopd "^1.2.0"
 
-elevenlabs@^1.51.0:
-  version "1.51.0"
-  resolved "https://registry.npmjs.org/elevenlabs/-/elevenlabs-1.51.0.tgz"
-  integrity sha512-o1cn3CvRM4EDahgb1pxke4cYvgJaGs+PDdBiC61crBnciCiX0zbKtNcLqnBZ/Bgzno/W0Ps7DlPOlv0yyQZzGA==
+elevenlabs@^1.52.0:
+  version "1.52.0"
+  resolved "https://registry.npmjs.org/elevenlabs/-/elevenlabs-1.52.0.tgz"
+  integrity sha512-O4lg1uAV0uMjkdKCbX0ftAFHUrOvqGZbWZXFPeaWPWhtXc46TWqZQpqhUaLnqjqd91Yzjs/4j5yE6n+5bLF/Zw==
   dependencies:
     command-exists "^1.2.9"
     execa "^5.1.1"
@@ -999,6 +999,11 @@ formdata-node@^6.0.3:
   version "6.0.3"
   resolved "https://registry.npmjs.org/formdata-node/-/formdata-node-6.0.3.tgz"
   integrity sha512-8e1++BCiTzUno9v5IZ2J6bv4RU+3UKDmqWUQD0MIMVCd9AdhWkO1gw57oo1mNEX1dMq2EGI+FbWz4B92pscSQg==
+
+fs@^0.0.1-security:
+  version "0.0.1-security"
+  resolved "https://registry.npmjs.org/fs/-/fs-0.0.1-security.tgz"
+  integrity sha512-3XY9e1pP0CVEUCdj5BmfIZxRBTSDycnbqhIOGec9QYtmVH2fbLpj86CFWkrNOkt/Fvty4KZG5lTglL9j/gJ87w==
 
 function-bind@^1.1.2:
   version "1.1.2"

@@ -8,6 +8,7 @@ export const generateAudio = async (inputText, selectedVoice, responseFormat) =>
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ input: inputText, voice: selectedVoice, response_format: responseFormat }),
+        
       });
   
       if (!response.ok) throw new Error("Failed to generate audio.");

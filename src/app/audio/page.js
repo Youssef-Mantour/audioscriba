@@ -9,13 +9,16 @@ import AudioPlayer from "./AudioPlayer";
 import { generateAudio } from "./api";
 import { Dancing_Script } from "next/font/google";
 
-const tinos = Dancing_Script({ subsets: ['latin'], weight: '700' });
+const tinos = Dancing_Script({
+  weight: '700',     // Specify the weight (700 for bold)
+  subsets: ['latin'], // Specify the subsets you want
+});
 
 export default function AudioGenerator() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [inputText, setInputText] = useState("");
-  const [selectedVoice, setSelectedVoice] = useState("sarah");
+  const [selectedVoice, setSelectedVoice] = useState("siwis");
   const [responseFormat, setResponseFormat] = useState("mp3");
   const [audioUrl, setAudioUrl] = useState(null);
   const audioRef = useRef(null);
