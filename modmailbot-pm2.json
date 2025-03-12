@@ -1,0 +1,15 @@
+{
+    "apps": [
+      {
+        "name": "modmailbot",
+        "script": "/npm.cmd",
+        "args": "run start",           
+        "instances": 1,
+        "exec_mode": "fork",
+        "env": {
+          "NODE_ENV": "production"
+        }
+      }
+    ]
+  }
+  
