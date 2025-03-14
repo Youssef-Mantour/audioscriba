@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Collapse from "@mui/material/Collapse";
+import LogoutButton from "./logoutbutton";
 
 export const Navigation = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -28,7 +29,7 @@ export const Navigation = () => {
     //{ label: "UserServer", href: "/users-server" },
     { label: "FAQ", href: "/faq" },
     { label: "Contact", href: "/contact" },
-    { label: "login", href: "/login" },
+  
   ];
 
   return (
@@ -71,7 +72,9 @@ export const Navigation = () => {
               {item.label}
             </Button>
           ))}
+          <LogoutButton></LogoutButton>
         </Box>
+
       </Toolbar>
 
       <Collapse
