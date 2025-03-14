@@ -1,0 +1,32 @@
+name: Deploy Next.js to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main  # Change if your main branch is named differently
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.DROPLET_IP }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to DigitalOcean
+        run: |
+          ssh root@${{ secrets.DROPLET_IP }} << 'EOF'
+            cd /var/www/audioscriba  # Change to your actual project path
+            git pull origin main
+            npm install
+            npm run build
+            pm2 restart audioscriba || pm2 start npm --name "audioscriba" -- start
+            exit
+          EOF
