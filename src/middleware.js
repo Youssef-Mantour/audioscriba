@@ -1,11 +1,13 @@
+// middleware.js or middleware.ts
 import { withAuth } from "next-auth/middleware";
 
 export default withAuth({
-  // Specify the pages that need authentication
   pages: {
-    signIn: "/login",  // Redirect to login if not authenticated
+    signIn: "/login", // Redirect to login if not authenticated
   },
-  // Matcher: List the routes that should be protected by authentication
-  matcher: ["/audio/*"],  // Example of protected routes
 });
 
+// Protect only /audio and its subpages
+export const config = {
+  matcher: ["/audio/:path*"], // Match /audio and all its subpages (e.g., /audio/play, /audio/edit)
+};
