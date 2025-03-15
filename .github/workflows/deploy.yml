@@ -22,5 +22,5 @@ jobs:
 
     - name: Deploy to server
       run: |
-        ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no user@${{ secrets.DROPLET_IP }} \
+        ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} \
           "cd /var/www/audioscriba && git pull && npm install && npm run build && pm2 restart audioscriba"
