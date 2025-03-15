@@ -1,3 +1,9 @@
+name: Deploy Next.js to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main  # Change if your main branch is named differently
 jobs:
   deploy:
     runs-on: ubuntu-latest
