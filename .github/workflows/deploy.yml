@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main  # Change if your main branch is named differently
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,13 +20,7 @@ jobs:
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan -H ${{ secrets.DROPLET_IP }} >> ~/.ssh/known_hosts
 
-    - name: Start SSH Agent and Add Key with Passphrase
-      run: |
-        eval $(ssh-agent -s)  # Start ssh-agent
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519  # Make sure the private key is saved correctly
-        echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"  # Pass the key and passphrase
-
     - name: Deploy to server
       run: |
-        ssh -o StrictHostKeyChecking=no user@${{ secrets.DROPLET_IP }} \
+        ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no user@${{ secrets.DROPLET_IP }} \
           "cd /var/www/audioscriba && git pull && npm install && npm run build && pm2 restart audioscriba"
