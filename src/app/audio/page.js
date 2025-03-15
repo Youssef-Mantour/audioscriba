@@ -18,7 +18,7 @@ export default function AudioGenerator() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [inputText, setInputText] = useState("");
-  const [selectedVoice, setSelectedVoice] = useState("siwis");
+  const [selectedVoice, setSelectedVoice] = useState("sarah");
   const [responseFormat, setResponseFormat] = useState("mp3");
   const [audioUrl, setAudioUrl] = useState(null);
   const audioRef = useRef(null);
