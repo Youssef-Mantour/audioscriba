@@ -1,39 +1,24 @@
-name: Deploy Next.js app to DigitalOcean Droplet
-
-on:
-  push:
-    branches:
-      - main
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the code
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      # Step 2: Set up SSH key and passphrase
-      - name: Set up SSH for deployment
-        run: |
-          # Create the SSH directory if it doesn't exist
-          mkdir -p ~/.ssh
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519  # Using your private key
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan -H ${{ secrets.DROPLET_IP }} >> ~/.ssh/known_hosts
 
-          # Store the private SSH key
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+    - name: Start SSH Agent and Add Key
+      run: |
+        eval $(ssh-agent -s)  # Start ssh-agent
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -  # Add the private key to the agent
 
-          # Set permissions for the private key (secure it)
-          chmod 600 ~/.ssh/id_ed25519
-
-          # Add Droplet's SSH key to the known_hosts file
-          ssh-keyscan -H ${{ secrets.DROPLET_IP }} >> ~/.ssh/known_hosts
-
-          # Set up the SSH agent and add the SSH key with passphrase
-          eval "$(ssh-agent -s)"
-          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add <(echo "${{ secrets.SSH_PRIVATE_KEY }}")
-
-      # Step 3: Deploy your app
-      - name: Deploy to Droplet
-        run: |
-          ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} "cd /var/www/audioscriba && git pull && npm install && npm run build && pm2 restart audioscriba"
+    - name: Deploy to server
+      run: |
+        ssh -o StrictHostKeyChecking=no user@${{ secrets.DROPLET_IP }} \
+          "cd /var/www/audioscriba && git pull && npm install && npm run build && pm2 restart audioscriba"
