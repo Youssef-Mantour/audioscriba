@@ -36,4 +36,4 @@ jobs:
       # Step 3: Deploy your app
       - name: Deploy to Droplet
         run: |
-          ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} "cd /var/www/audioscriba && git pull && npm install && npm run build && pm2 restart app"
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} "cd /var/www/audioscriba && git pull && npm install && npm run build && pm2 restart audioscriba"
