@@ -22,7 +22,8 @@ jobs:
     - name: Start SSH Agent and Add Key with Passphrase
       run: |
         eval $(ssh-agent -s)  # Start ssh-agent
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add - <<< "${{ secrets.SSH_PASSPHRASE }}"  # Add the key with the passphrase
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519  # Make sure the private key is saved correctly
+        echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"  # Pass the key and passphrase
 
     - name: Deploy to server
       run: |
