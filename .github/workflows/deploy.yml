@@ -15,14 +15,14 @@ jobs:
     - name: Set up SSH
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519  # Using your private key
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan -H ${{ secrets.DROPLET_IP }} >> ~/.ssh/known_hosts
 
-    - name: Start SSH Agent and Add Key
+    - name: Start SSH Agent and Add Key with Passphrase
       run: |
         eval $(ssh-agent -s)  # Start ssh-agent
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -  # Add the private key to the agent
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add - <<< "${{ secrets.SSH_PASSPHRASE }}"  # Add the key with the passphrase
 
     - name: Deploy to server
       run: |
