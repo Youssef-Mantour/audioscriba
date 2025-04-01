@@ -19,7 +19,7 @@ export const Navigation = () => {
   };
 
   const navItems = [
-    { label: "audio", href: "/audio" },
+    { label: "audio", href: "/languages-board" },
     { label: "Use Cases", href: "/usecases" },
     { label: "Pricing", href: "/" },
     { label: "FAQ", href: "/faq" },
