@@ -1,3 +1,5 @@
+import { Language } from "@mui/icons-material";
+
 // api.js
 export const generateAudio = async (inputText, selectedVoice, responseFormat) => {
     try {
@@ -7,7 +9,7 @@ export const generateAudio = async (inputText, selectedVoice, responseFormat) =>
           "Authorization": "Bearer Dz0IFPHdVJ2R16m0ol6Vo28Rp0Qi5Cic",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ input: inputText, voice: selectedVoice, response_format: responseFormat }),
+        body: JSON.stringify({ input: inputText, voice: selectedVoice, response_format: responseFormat, Language:"pt" }),
         
       });
   
