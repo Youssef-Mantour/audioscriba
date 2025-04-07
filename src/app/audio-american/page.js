@@ -5,7 +5,7 @@ import { Button, CircularProgress, Typography, Box } from "@mui/material";
 import VoiceSelector from "./VoiceSelector";
 import FormatSelector from "./FormatSelector";
 import TextInput from "./TextInput";
-import AudioPlayer from "./AudioPlayer";
+import AudioPlayer from "../components/AudioPlayer";
 import { generateAudio } from "./api";
 import { Dancing_Script } from "next/font/google";
 
@@ -18,7 +18,7 @@ export default function AudioGenerator() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [inputText, setInputText] = useState("");
-  const [selectedVoice, setSelectedVoice] = useState("siwis");
+  const [selectedVoice, setSelectedVoice] = useState("sarah");
   const [responseFormat, setResponseFormat] = useState("mp3");
   const [audioUrl, setAudioUrl] = useState(null);
   const audioRef = useRef(null);

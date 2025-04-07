@@ -5,7 +5,7 @@ import { Button, CircularProgress, Typography, Box } from "@mui/material";
 import VoiceSelector from "./VoiceSelector";
 import FormatSelector from "./FormatSelector";
 import TextInput from "./TextInput";
-import AudioPlayer from "./AudioPlayer";
+import AudioPlayer from "../components/AudioPlayer";
 import { generateAudio } from "./api";
 import { Dancing_Script } from "next/font/google";
 
