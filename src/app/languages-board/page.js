@@ -15,7 +15,7 @@ export default function Page() {
     { label: "British", href: "/audio-british", country: "GB" },
     { label: "French", href: "/audio-french", country: "FR" },
     { label: "Spanish", href: "/audio-spanish", country: "ES" },
-    { label: "Italian", href: "/audio-italien", country: "IT" },
+    { label: "Italian", href: "/audio-italian", country: "IT" },
     { label: "Portuguese", href: "/audio-portuguese", country: "PT" },
     { label: "Hindi", href: "/audio-hindi", country: "IN" },
     { label: "Chinese", href: "/audio-chinese", country: "CN" },
