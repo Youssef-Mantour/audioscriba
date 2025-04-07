@@ -7,7 +7,7 @@ export const generateAudio = async (inputText, selectedVoice, responseFormat) =>
           "Authorization": "Bearer Dz0IFPHdVJ2R16m0ol6Vo28Rp0Qi5Cic",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ input: inputText, voice: selectedVoice, response_format: responseFormat }),
+        body: JSON.stringify({ input: inputText, voice: selectedVoice, response_format: responseFormat,language:"en-gb" }),
         
       });
   

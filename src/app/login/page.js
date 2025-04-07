@@ -11,7 +11,7 @@ export default function LoginPage() {
   // Redirect authenticated users to /audio
   useEffect(() => {
     if (status === "authenticated") {
-      router.push("/audio");
+      router.push("/");
     }
   }, [status, router]);
 
