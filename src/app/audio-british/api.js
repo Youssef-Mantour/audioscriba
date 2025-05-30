@@ -4,11 +4,11 @@ export const generateAudio = async (inputText, selectedVoice, responseFormat) =>
       const response = await fetch("https://api.lemonfox.ai/v1/audio/speech", {
         method: "POST",
         headers: {
-          "Authorization": "Bearer Dz0IFPHdVJ2R16m0ol6Vo28Rp0Qi5Cic",
+          "Authorization": process.env.LEMONFOX_API_KEY,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ input: inputText, voice: selectedVoice, response_format: responseFormat,language:"en-gb" }),
-        
+     
       });
   
       if (!response.ok) throw new Error("Failed to generate audio.");
@@ -16,6 +16,7 @@ export const generateAudio = async (inputText, selectedVoice, responseFormat) =>
       return URL.createObjectURL(await response.blob());
     } catch (error) {
       throw new Error(error.message);
+      
     }
   };
   

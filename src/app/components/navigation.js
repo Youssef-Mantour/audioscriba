@@ -10,50 +10,32 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Collapse from "@mui/material/Collapse";
 import LogoutButton from "./logoutbutton";
+import { useSession } from "next-auth/react";
 
 export const Navigation = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { data: session, status } = useSession();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
   const navItems = [
-    { label: "audio", href: "/languages-board" },
-   // { label: "test1", href: "/test1" },
-    //{ label: "About", href: "/about" },
+    // { label: "Audio", href: "/languages-board" },
     { label: "Use Cases", href: "/usecases" },
-    //{ label: "Test", href: "/test" },
     { label: "Pricing", href: "/" },
-    //{ label: "Users", href: "/users" },
-    //{ label: "UserServer", href: "/users-server" },
     { label: "FAQ", href: "/faq" },
+    { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
-  
   ];
 
   return (
     <AppBar position="fixed" color="primary">
-      
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between",margin:1 }}>
-      <Typography 
-  variant="h4" 
-  gutterBottom 
-  sx={{ 
-    fontFamily: 'sans-serif', 
-    fontWeight: "bold", 
-    
-    
-  }}
->
-<Link href="/" style={{ fontSize: "1.5rem" }}>AudioScriba</Link>
-  
-</Typography>
-
-
-        <Typography variant="h6" component="div" >
-
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between", margin: 1 }}>
+        <Typography variant="h4" gutterBottom sx={{ fontFamily: 'sans-serif', fontWeight: "bold" }}>
+          <Link href="/" style={{ fontSize: "1.5rem" }}>AudioScriba</Link>
         </Typography>
+
         <IconButton
           edge="start"
           color="inherit"
@@ -63,17 +45,43 @@ export const Navigation = () => {
         >
           <MenuIcon />
         </IconButton>
+
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
           {navItems.map((item) => (
-            <Button key={item.href} color="inherit" component={Link} href={item.href} 
-            sx={{ 
-              fontSize: "1.5rem" , textTransform: "capitalize",fontFamily:"Georgia, Serif",
-              }}>
+            <Button
+              key={item.href}
+              color="inherit"
+              component={Link}
+              href={item.href}
+              sx={{ fontSize: "1.5rem", textTransform: "capitalize", fontFamily: "Georgia, Serif" }}
+            >
               {item.label}
             </Button>
           ))}
-          <LogoutButton></LogoutButton>
         </Box>
+
+        {/* Always visible Logout Button */}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <LogoutButton />
+        </Box>
+        {session?.user ? (
+  <>
+    <span style={{ marginRight: "1rem" }}>
+      {session.user.name || "User"}! <br />
+      {session.user.email || "No email"}
+    </span>
+
+    {session.user.image && (
+      <img
+        src={session.user.image}
+        alt="User Avatar"
+        style={{ width: "32px", height: "32px", borderRadius: "50%" }}
+      />
+    )}
+  </>
+) : (
+  <span></span>
+)}
 
       </Toolbar>
 

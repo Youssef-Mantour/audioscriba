@@ -17,9 +17,9 @@ export default function LogoutButton() {
 
   useEffect(() => {
     console.log("Session status:", status, "Session:", session); // Debugging Log
-    if (!session && status !== "loading") {
+    /* if (!session && status !== "loading") {
       router.replace("/");
-    }
+    } */
   }, [session, status, router]);
 
   if (status === "loading") return null;
@@ -30,7 +30,7 @@ export default function LogoutButton() {
         <Button  sx={{ color:'black',
           fontSize: "1.5rem" , textTransform: "capitalize",fontFamily:"Georgia, Serif",
           }}
-          onClick={() => signIn(undefined, { callbackUrl: "/audio" })}
+          onClick={() => router.push("/auth/custom-login")}
          
         >
           Sign In

@@ -4,10 +4,11 @@ import { useState, useRef } from "react";
 import { Button, CircularProgress, Typography, Box } from "@mui/material";
 import VoiceSelector from "./VoiceSelector";
 import FormatSelector from "./FormatSelector";
-import TextInput from "./TextInput";
+import TextInput from "../components/TextInput";
 import AudioPlayer from "../components/AudioPlayer";
 import { generateAudio } from "./api";
 import { Dancing_Script } from "next/font/google";
+import LanguageBord from "@/languages-board/page";
 
 const tinos = Dancing_Script({
   weight: '700',     // Specify the weight (700 for bold)
@@ -43,6 +44,7 @@ export default function AudioGenerator() {
 
   return (
     <Box sx={{ maxWidth: 960, mx: "auto", mt: 5, textAlign: "center" }}>
+      <LanguageBord></LanguageBord>
       <Typography variant="h3" gutterBottom className={tinos.className}>Text-to-Speech Audio Generator</Typography>
       <VoiceSelector selectedVoice={selectedVoice} handleVoiceChange={handleVoiceChange} />
       <FormatSelector responseFormat={responseFormat} handleFormatChange={handleFormatChange} />

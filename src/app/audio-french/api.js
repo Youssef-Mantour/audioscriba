@@ -6,10 +6,10 @@ export const generateAudio = async (inputText, selectedVoice, responseFormat) =>
       const response = await fetch("https://api.lemonfox.ai/v1/audio/speech", {
         method: "POST",
         headers: {
-          "Authorization": "Bearer Dz0IFPHdVJ2R16m0ol6Vo28Rp0Qi5Cic",
+          "Authorization": "Bearer voDjH8LZqHTPCyJRePIAzHZEL206QRY6",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ input: inputText, voice: selectedVoice, response_format: responseFormat,Language:"fr" }),  
+        body: JSON.stringify({ input: inputText, voice: selectedVoice, response_format: responseFormat,language:"fr" }),  
         
       });
   

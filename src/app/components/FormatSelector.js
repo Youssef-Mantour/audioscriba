@@ -1,7 +1,7 @@
 // FormatSelector.js
 import { RadioGroup, FormControl, FormLabel, Radio, FormControlLabel } from "@mui/material";
-import { formats } from "./constants";
 
+export const formats = ["mp3", "opus", "aac", "flac", "pcm", "wav"];
 export default function FormatSelector({ responseFormat, handleFormatChange }) {
   return (
     <FormControl sx={{ mb: 3 }}>
