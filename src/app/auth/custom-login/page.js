@@ -10,7 +10,7 @@ export default function CustomOAuthLogin() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      router.push("/audio-american"); // redirect if logged in
+      router.push("/audio-french"); // redirect if logged in
     }
   }, [status, router]);
 
@@ -29,7 +29,7 @@ export default function CustomOAuthLogin() {
       <h1>Sign In</h1>
       <button
         style={{ display: "block", marginBottom: 10 }}
-        onClick={() => signIn("google", { callbackUrl: "/audio-american" })}
+        onClick={() => signIn("google", { callbackUrl: "/audio-french" })}
       >
         Sign in with Google
       </button>

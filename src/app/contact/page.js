@@ -15,6 +15,7 @@ const TextareaExample = () => {
 
   return (
     <Box sx={{ maxWidth: 1000, margin: 'auto'}}>
+      <h1>{process.env.NEXT_PUBLIC_LEMONFOX_API_KEY}</h1>
       <TextField 
         label="Your Message"
         helperText="type your text"

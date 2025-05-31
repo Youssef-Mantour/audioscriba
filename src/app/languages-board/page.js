@@ -10,17 +10,18 @@ export default function LanguageBord() {
   const router = useRouter();
   const pathname = usePathname(); // gets the current path like /audio-french
   const [selectedOption, setSelectedOption] = useState("");
-
+  //const voices = ["michael", "george", "lewis", "bella", "emma", "nicole", "sarah", "isabella", "sky", "adam"];
+  //const language = "en-us";
   const navItems = [
-    { label: "American", href: "/audio-american", country: "US" },
-    { label: "British", href: "/audio-british", country: "GB" },
-    { label: "French", href: "/audio-french", country: "FR" },
-    { label: "Spanish", href: "/audio-spanish", country: "ES" },
-    { label: "Italian", href: "/audio-italian", country: "IT" },
-    { label: "Portuguese", href: "/audio-portuguese", country: "PT" },
-    { label: "Hindi", href: "/audio-hindi", country: "IN" },
-    { label: "Chinese", href: "/audio-chinese", country: "CN" },
-    { label: "Japanese", href: "/audio-japanese", country: "JP" },
+    { label: "American", href: `/audio/${"en-us"}/${["michael", "george", "lewis", "bella", "emma", "nicole", "sarah", "isabella", "sky", "adam"]}`, country: "US" },
+    { label: "British", href: `/audio/${"en-br"}/${["alice", "emma", "isabella", "lily", "daniel", "fabel", "george", "lewis"]}`, country: "GB" },
+    { label: "French", href: `/audio/${"fr"}/${["siwis"]}`, country: "FR" },
+    { label: "Spanish", href: `/audio/${"es"}/${["dora", "alex", "noel"]}`, country: "ES" },
+    { label: "Italian", href: `/audio/${"it"}/${["sara", "nicola"]}`, country: "IT" },
+    { label: "Portuguese", href: `/audio/${"pt-br"}/${["clara", "tiago", "papai"]}`, country: "PT" },
+    { label: "Hindi", href: `/audio/${"hi"}/${["alpha", "beta", "omega", "psi"]}`, country: "IN" },
+    { label: "Chinese", href: `/audio/${"ch"}/${["xiaobei", "xiaoni", "xiaoxiao", "xiaoyi", "yunjian","yunyang","yunxia","yunxi"]}`, country: "CN" },
+    { label: "Japanese", href: `/audio/${"ja"}/${["sakura", "kumo", "tebukuro", "nezumi", "gongitsune"]}`, country: "JP" },
   ];
 
   // Set the selectedOption based on current path on first render

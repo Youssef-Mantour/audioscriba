@@ -1,9 +1,9 @@
 // VoiceSelector.js
 import Image from "next/image";
 import { Typography, Grid } from "@mui/material";
-import { voices } from "./constants";
 
-export default function VoiceSelector({ selectedVoice, handleVoiceChange }) {
+
+export default function VoiceSelector({ selectedVoice, handleVoiceChange,voices }) {
   return (
     <Grid container spacing={2} justifyContent="center" sx={{ mb: 3 }}>
       {voices.map((voice) => (
