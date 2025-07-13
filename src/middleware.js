@@ -1,13 +1,20 @@
-// middleware.js or middleware.ts
-import { withAuth } from "next-auth/middleware";
+import { updateSession } from '@/utils/supabase/middleware';
 
-export default withAuth({
-  pages: {
-    signIn: "/custom-login", // Redirect to login if not authenticated
-  },
-});
+export async function middleware(request) {
+  // `request` is a NextRequest instance; no type annotation is needed in JS
+  return updateSession(request);
+}
 
-// Protect only /audio and its subpages
 export const config = {
-  matcher: ["/audio-hindi","/audio-italian","/audio-japaese","/audio-portuguese","/audio-spanish","/audio-british","/audio-chinese","/audio-american"], // Match /audio and all its subpages (e.g., /audio/play, /audio/edit)
+  matcher: [
+    '/languages-board/:path*',
+    /*
+     * Match all request paths except those starting with:
+     * - _next/static  (static files)
+     * - _next/image   (image optimization files)
+     * - favicon.ico   (favicon)
+     * - Any file ending in a common image extension
+     */
+    //'/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
 };
