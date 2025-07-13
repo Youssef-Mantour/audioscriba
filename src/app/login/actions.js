@@ -42,14 +42,17 @@ export async function signup(formData) {
 }
 
 // New: Google OAuth sign-in
+
+
+
+
 export async function signInWithGoogle() {
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.signInWithOAuth({
+  const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      // redirect URL after sign in, adjust if needed
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/blog`,
+      redirectTo: 'http://localhost:3000/auth/callback?next=/languages-board',
     },
   });
 
@@ -57,5 +60,6 @@ export async function signInWithGoogle() {
     return redirect('/error');
   }
 
-  // OAuth redirects the user, so no revalidate or redirect here needed
+  // This actually sends the browser to Google’s consent page
+  redirect(data.url);
 }
