@@ -1,8 +1,10 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
+
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -11,30 +13,59 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import MenuIcon from '@mui/icons-material/Menu';
+import Chip from '@mui/material/Chip';
 
-// ✅ Supabase client
+// Supabase client (browser‑side)
 const supabase = createClient();
 
-export  function Navigation() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [session, setSession] = useState();
+export function Navigation() {
+  const router = useRouter();
 
+  // ── state ───────────────────────────────────────────────
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [session, setSession] = useState(null);
+  const [credits, setCredits] = useState(null); // null = guest
+
+  // ── auth + credit fetch ────────────────────────────────
   useEffect(() => {
+    // Pull balance for current user
+    const fetchCredits = async (userId) => {
+      const { data, error } = await supabase
+        .from('user_credits')
+        .select('total_credits, used_credits')
+        .eq('user_id', userId)
+        .single();
+
+      if (!error && data) {
+        setCredits((data.total_credits ?? 0) - (data.used_credits ?? 0));
+      } else {
+        setCredits(null);
+      }
+    };
+
+    // Initial session
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
+      if (data.session?.user) fetchCredits(data.session.user.id);
     });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, newSession) =>
-      setSession(newSession)
+    // Listen for sign‑in/out
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, newSession) => {
+        setSession(newSession);
+        if (newSession?.user) {
+          fetchCredits(newSession.user.id);
+        } else {
+          setCredits(null);
+        }
+      }
     );
 
-    return () => {
-      subscription.unsubscribe();
-    };
+    // Cleanup
+    return () => listener.subscription.unsubscribe();
   }, []);
 
+  // ── nav items ──────────────────────────────────────────
   const navItems = [
     { label: 'Use Cases', href: '/usecases' },
     { label: 'Pricing', href: '/' },
@@ -43,35 +74,55 @@ export  function Navigation() {
     { label: 'Contact', href: '/contact' },
   ];
 
-  const router = useRouter();
-
-const handleSignIn = () => {
-  router.push('/login');
-};
-  const handleSignOut =  () => {
-    
+  // ── auth handlers ─────────────────────────────────────
+  const handleSignIn = () => router.push('/login');
+  const handleSignOut = () => {
     supabase.auth.signOut();
     router.push('/');
   };
 
   const AuthButton = () =>
     session ? (
-      <Button color="inherit" onClick={handleSignOut} sx={{ fontSize: '1.5rem', textTransform: 'capitalize', fontFamily: 'Georgia, Serif' }}>
+      <Button
+        onClick={handleSignOut}
+        color="inherit"
+        sx={{
+          fontSize: '1.5rem',
+          textTransform: 'capitalize',
+          fontFamily: 'Georgia, Serif',
+        }}
+      >
         Logout
       </Button>
     ) : (
-      <Button color="inherit" onClick={handleSignIn} sx={{ textTransform: 'none', fontSize: '1.5rem', fontFamily: 'Georgia, Serif' }}>
+      <Button
+        onClick={handleSignIn}
+        color="inherit"
+        sx={{
+          fontSize: '1.5rem',
+          textTransform: 'capitalize',
+          fontFamily: 'Georgia, Serif',
+        }}
+      >
         Login
       </Button>
     );
 
+  // ── render ─────────────────────────────────────────────
   return (
     <AppBar position="fixed" color="primary">
       <Toolbar sx={{ justifyContent: 'space-between', mx: 1 }}>
-        <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-          <Link href="/" style={{ fontSize: '1.5rem' }}>AudioScriba</Link>
+        {/* Brand */}
+        <Typography
+          variant="h4"
+          sx={{ fontWeight: 'bold', fontFamily: 'sans-serif' }}
+        >
+          <Link href="/" style={{ fontSize: '1.5rem' }}>
+            AudioScriba
+          </Link>
         </Typography>
 
+        {/* Burger (mobile) */}
         <IconButton
           edge="start"
           color="inherit"
@@ -82,21 +133,37 @@ const handleSignIn = () => {
           <MenuIcon />
         </IconButton>
 
+        {/* Desktop links */}
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
           {navItems.map(({ label, href }) => (
             <Button
               key={href}
-              color="inherit"
-              component={Link}
               href={href}
-              sx={{ fontSize: '1.5rem', textTransform: 'capitalize', fontFamily: 'Georgia, Serif' }}
+              component={Link}
+              color="inherit"
+              sx={{
+                fontSize: '1.5rem',
+                textTransform: 'capitalize',
+                fontFamily: 'Georgia, Serif',
+              }}
             >
               {label}
             </Button>
           ))}
+
+          {/* 💎 credit badge */}
+          {credits !== null && (
+            <Chip
+              label={`💎 ${credits}`}
+              color="secondary"
+              sx={{ fontWeight: 'bold' }}
+            />
+          )}
+
           <AuthButton />
         </Box>
 
+        {/* Avatar & name */}
         {session?.user && (
           <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
             <Typography variant="body2" sx={{ mr: 1 }}>
@@ -113,20 +180,33 @@ const handleSignIn = () => {
         )}
       </Toolbar>
 
-      <Collapse in={menuOpen} sx={{ display: { xs: 'block', md: 'none' }, bgcolor: 'primary.main' }}>
+      {/* Mobile dropdown */}
+      <Collapse
+        in={menuOpen}
+        sx={{ display: { xs: 'block', md: 'none' }, bgcolor: 'primary.main' }}
+      >
         <Box sx={{ display: 'flex', flexDirection: 'column', p: 2 }}>
           {navItems.map(({ label, href }) => (
             <Button
               key={href}
-              color="inherit"
-              component={Link}
               href={href}
+              component={Link}
+              color="inherit"
               onClick={() => setMenuOpen(false)}
               sx={{ justifyContent: 'flex-start', fontSize: '1.2rem' }}
             >
               {label}
             </Button>
           ))}
+
+          {credits !== null && (
+            <Chip
+              label={`💎 ${credits}`}
+              color="secondary"
+              sx={{ my: 1, alignSelf: 'flex-start' }}
+            />
+          )}
+
           <AuthButton />
         </Box>
       </Collapse>
