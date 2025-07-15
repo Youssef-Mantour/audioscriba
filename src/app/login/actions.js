@@ -21,6 +21,7 @@ export async function login(formData) {
 
   revalidatePath('/', 'layout');
   redirect('/languages-board/');
+  
 }
 
 export async function signup(formData) {

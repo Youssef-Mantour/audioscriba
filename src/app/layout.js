@@ -1,5 +1,5 @@
 "use client";
-import { SessionProvider } from "next-auth/react";
+
 import { useState, useEffect } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";

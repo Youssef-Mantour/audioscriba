@@ -1,10 +1,11 @@
 'use client';
-import React from 'react';
 import { login, signup, signInWithGoogle } from './actions';
+
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
+import GoogleIcon from '@mui/icons-material/Google';   // optional: nice visual cue
 
 export default function LoginPage() {
   return (
@@ -16,60 +17,48 @@ export default function LoginPage() {
     >
       <Stack spacing={2}>
         <TextField
-          required
           id="email"
           name="email"
           label="Email"
           type="email"
-          variant="outlined"
+          required
           fullWidth
         />
+
         <TextField
-          required
           id="password"
           name="password"
           label="Password"
           type="password"
-          variant="outlined"
+          required
           fullWidth
         />
+
+        {/* native form‑actions keep working */}
         <Button
+          type="submit"
           variant="contained"
           color="primary"
-          type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            login();
-          }}
+          formAction={login}
         >
           Log in
         </Button>
+
         <Button
+          type="submit"
           variant="outlined"
           color="primary"
-          type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            signup();
-          }}
+          formAction={signup}
         >
           Sign up
         </Button>
+
+        {/* Google OAuth – no form submit, just call the client action */}
         <Button
-          variant="text"
-          color="secondary"
           type="button"
-          onClick={() => {
-            // If logout is an action URL string, handle accordingly
-            window.location.href = '/logout';
-          }}
-        >
-          Log out
-        </Button>
-        <Button
           variant="contained"
           color="secondary"
-          type="button"
+          startIcon={<GoogleIcon />}        // remove if you don't want the icon
           onClick={signInWithGoogle}
         >
           Sign in with Google

@@ -2,8 +2,7 @@
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { createBrowserClient } from '@supabase/ssr';
-
+import { createClient } from '@/utils/supabase/client';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -14,14 +13,11 @@ import Collapse from '@mui/material/Collapse';
 import MenuIcon from '@mui/icons-material/Menu';
 
 // ✅ Supabase client
-const supabase = createBrowserClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+const supabase = createClient();
 
 export  function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -52,15 +48,19 @@ export  function Navigation() {
 const handleSignIn = () => {
   router.push('/login');
 };
-  const handleSignOut = () => supabase.auth.signOut();
+  const handleSignOut =  () => {
+    
+    supabase.auth.signOut();
+    router.push('/');
+  };
 
   const AuthButton = () =>
     session ? (
-      <Button color="inherit" onClick={handleSignOut} sx={{ textTransform: 'none' }}>
+      <Button color="inherit" onClick={handleSignOut} sx={{ fontSize: '1.5rem', textTransform: 'capitalize', fontFamily: 'Georgia, Serif' }}>
         Logout
       </Button>
     ) : (
-      <Button color="inherit" onClick={handleSignIn} sx={{ textTransform: 'none' }}>
+      <Button color="inherit" onClick={handleSignIn} sx={{ textTransform: 'none', fontSize: '1.5rem', fontFamily: 'Georgia, Serif' }}>
         Login
       </Button>
     );
