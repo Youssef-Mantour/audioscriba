@@ -98,7 +98,7 @@ export default function RootLayout({ children }) {
           </AppBar>
 
           {/* Main Content */}
-          <Container maxWidth="md" sx={{ marginTop: 4, minHeight: "80vh" }}>
+          <Container maxWidth="lg" sx={{ marginTop: 1, minHeight: "80vh" }}>
             {children}
           </Container>
 
@@ -110,6 +110,7 @@ export default function RootLayout({ children }) {
               color: "white",
               padding: 2,
               textAlign: "center",
+              mt: 2,
             }}
           > 
             <Footer />

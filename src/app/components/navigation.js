@@ -151,15 +151,7 @@ export function Navigation() {
             </Button>
           ))}
 
-          {/* 💎 credit badge */}
-          {credits !== null && (
-            <Chip
-              label={`💎 ${credits}`}
-              color="secondary"
-              sx={{ fontWeight: 'bold' }}
-            />
-          )}
-
+          
           <AuthButton />
         </Box>
 
@@ -199,13 +191,7 @@ export function Navigation() {
             </Button>
           ))}
 
-          {credits !== null && (
-            <Chip
-              label={`💎 ${credits}`}
-              color="secondary"
-              sx={{ my: 1, alignSelf: 'flex-start' }}
-            />
-          )}
+          
 
           <AuthButton />
         </Box>
