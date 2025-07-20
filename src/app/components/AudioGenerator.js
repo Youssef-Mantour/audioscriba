@@ -269,7 +269,26 @@ export default function AudioGenerator({ language, voices }) {
 
       {/* Main Content */}
       <Box sx={{ maxWidth: 1960, mx: 'auto', mt: 5, textAlign: 'center' }}>
-        <LanguageBord />
+        <Box
+  sx={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center', // ✅ horizontally center
+    gap: 2, // spacing between items
+    mt: 2,
+  }}
+>
+  <LanguageBord />
+  <Button
+    variant="contained"
+    color="primary"
+    onClick={generateAndPlayAudio}
+    disabled={loading}
+  >
+    {loading ? <CircularProgress size={24} /> : 'Generate Audio'}
+  </Button>
+</Box>
+
         <Typography variant="h3" gutterBottom className={tinos.className}>
           Text-to-Speech Audio Generator
         </Typography>
@@ -284,15 +303,7 @@ export default function AudioGenerator({ language, voices }) {
           </Typography>
         )}
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={generateAndPlayAudio}
-          disabled={loading}
-          sx={{ mt: 2 }}
-        >
-          {loading ? <CircularProgress size={24} /> : 'Generate Audio'}
-        </Button>
+        
 
         {audioUrl && (
           <AudioPlayer
