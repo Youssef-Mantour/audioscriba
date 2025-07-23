@@ -72,6 +72,7 @@ export function Navigation() {
     { label: 'FAQ', href: '/faq' },
     { label: 'Blog', href: '/blog' },
     { label: 'Contact', href: '/contact' },
+    { label: 'Dashboard', href: '/languages-board' },
   ];
 
   // ── auth handlers ─────────────────────────────────────
