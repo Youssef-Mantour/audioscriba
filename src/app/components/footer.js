@@ -17,7 +17,7 @@ export const Footer = () => {
       }}
     >
       <Container maxWidth="sm">
-        <Typography variant="body1" align="center">
+        <Typography variant="body1" color="text.secondary" align="center">
           Created by YoMa AI & Web Solutions
         </Typography>
         <Typography variant="body2" color="text.secondary" align="center">
