@@ -121,9 +121,9 @@ export default function RootLayout({ children }) {
 
           {/* Main Content */}
           <Container maxWidth="lg" sx={{ marginTop: 1, minHeight: "80vh" }}>
-           <AnalyticsProvider>
+           <AnalyticsProvider />
             {children}
-            </AnalyticsProvider>
+            
           </Container>
 
           {/* Footer */}
