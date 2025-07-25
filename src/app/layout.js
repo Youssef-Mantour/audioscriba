@@ -54,10 +54,7 @@ const getTheme = (mode) =>
       fontFamily: "var(--font-geist-sans), sans-serif",
     },
   });
-export const metadata = {
-  title: "your smart way to convert text to speech",
-  description: "My awesome app",
-};
+
 
 export default function RootLayout({ children }) {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
