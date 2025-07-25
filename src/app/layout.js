@@ -54,6 +54,10 @@ const getTheme = (mode) =>
       fontFamily: "var(--font-geist-sans), sans-serif",
     },
   });
+export const metadata = {
+  title: "your smart way to convert text to speech",
+  description: "My awesome app",
+};
 
 export default function RootLayout({ children }) {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -75,7 +79,28 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <head><link rel="icon" href="/favicon.ico" sizes="any" /></head>
+      <head>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    {/* Google Analytics script */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-MMBRXP6YWL"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-MMBRXP6YWL', {
+                page_path: window.location.pathname,
+              });
+            `,
+          }}
+        />
+    
+    
+    </head>
     
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider theme={theme}>
