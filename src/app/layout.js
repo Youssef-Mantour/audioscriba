@@ -5,7 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
-
+import AnalyticsProvider from '@/components/AnalyticsProvider';
 import {
   CssBaseline,
   Container,
@@ -121,7 +121,9 @@ export default function RootLayout({ children }) {
 
           {/* Main Content */}
           <Container maxWidth="lg" sx={{ marginTop: 1, minHeight: "80vh" }}>
+           <AnalyticsProvider>
             {children}
+            </AnalyticsProvider>
           </Container>
 
           {/* Footer */}
