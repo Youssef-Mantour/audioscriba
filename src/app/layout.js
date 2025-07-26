@@ -65,6 +65,7 @@ export default function RootLayout({ children }) {
       </head>
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <GoogleAnalytics trackPageViews />
         <ThemeProvider theme={theme}>
           <CssBaseline />
           
@@ -86,7 +87,7 @@ export default function RootLayout({ children }) {
 
           {/* Main Content */}
           <Container maxWidth="lg" sx={{ mt: 2, minHeight: '80vh' }}>
-            <GoogleAnalytics trackPageViews />
+            
             
             {children}
           </Container>
