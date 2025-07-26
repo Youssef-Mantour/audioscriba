@@ -1,11 +1,11 @@
 'use client';
-
+import { GoogleAnalytics } from 'nextjs-google-analytics';
 import { useState, useEffect } from 'react';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
-import AnalyticsProvider from '@/components/AnalyticsProvider';
+
 import {
   CssBaseline,
   Container,
@@ -61,28 +61,13 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         {/* Google Analytics */}
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-MMBRXP6YWL"
-        ></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-MMBRXP6YWL', {
-                page_path: window.location.pathname,
-              });
-            `,
-          }}
-        />
+        
       </head>
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <AnalyticsProvider />
+          
 
           {/* AppBar */}
           <AppBar position="static" color="primary">
@@ -101,6 +86,8 @@ export default function RootLayout({ children }) {
 
           {/* Main Content */}
           <Container maxWidth="lg" sx={{ mt: 2, minHeight: '80vh' }}>
+            <GoogleAnalytics trackPageViews />
+            
             {children}
           </Container>
 
