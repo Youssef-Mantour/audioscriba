@@ -119,7 +119,7 @@ export function Navigation() {
           sx={{ fontWeight: 'bold', fontFamily: 'sans-serif' }}
         >
           <Link href="/" style={{ fontSize: '1.5rem' }}>
-            AudioScriba
+            TxtVoxAI
           </Link>
         </Typography>
 
