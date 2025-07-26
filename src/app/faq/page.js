@@ -43,8 +43,8 @@ const faqs = [
     answer: "You can reach our support team through email or live chat on our website for assistance."
   }
 ];
-
-export default function FAQ() {
+const FAQ = () =>
+ {
   const [expandedIndex, setExpandedIndex] = useState(null);
 
   const handleExpand = (index) => {
@@ -79,4 +79,6 @@ export default function FAQ() {
       </List>
     </Box>
   );
-}
+};
+
+export default FAQ;
