@@ -65,7 +65,8 @@ export default function RootLayout({ children }) {
       </head>
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <GoogleAnalytics trackPageViews />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} trackPageViews />
+
         <ThemeProvider theme={theme}>
           <CssBaseline />
           
