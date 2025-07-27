@@ -279,9 +279,14 @@ export default function AudioGenerator({ language, voices }) {
   }}
 >
   <LanguageBord />
-  <Typography className={`${tinos.className} dancingScriptFallback`} variant="h4" gutterBottom>
+  <Typography
+  variant="h5"
+  gutterBottom
+  style={{ fontFamily: "'Dancing Script', cursive" }}
+>
   Text-to-Speech Audio Generator
 </Typography>
+
   <Button
     variant="contained"
     color="primary"

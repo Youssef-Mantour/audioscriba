@@ -61,6 +61,11 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         {/* Google Analytics */}
+        <link
+  href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
+
         
       </head>
 
