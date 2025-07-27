@@ -282,9 +282,10 @@ export default function AudioGenerator({ language, voices }) {
   <Typography
   variant="h4"
   gutterBottom
-  style={{ fontFamily: "'Dancing Script', cursive" }}
+  style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 'bold' }}
+
 >
-  Text-to-Speech Audio Generator
+  Text-to-Speech Generator
 </Typography>
 
   <Button
