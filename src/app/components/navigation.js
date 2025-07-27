@@ -15,20 +15,17 @@ import Collapse from '@mui/material/Collapse';
 import MenuIcon from '@mui/icons-material/Menu';
 import Tooltip from '@mui/material/Tooltip';
 
-// Supabase client (browser‑side)
+// Supabase client (browser-side)
 const supabase = createClient();
 
 export function Navigation() {
   const router = useRouter();
 
-  // ── state ───────────────────────────────────────────────
   const [menuOpen, setMenuOpen] = useState(false);
   const [session, setSession] = useState(null);
   const [credits, setCredits] = useState(null); // null = guest
 
-  // ── auth + credit fetch ────────────────────────────────
   useEffect(() => {
-    // Pull balance for current user
     const fetchCredits = async (userId) => {
       const { data, error } = await supabase
         .from('user_credits')
@@ -43,13 +40,11 @@ export function Navigation() {
       }
     };
 
-    // Initial session
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       if (data.session?.user) fetchCredits(data.session.user.id);
     });
 
-    // Listen for sign‑in/out
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, newSession) => {
         setSession(newSession);
@@ -61,11 +56,9 @@ export function Navigation() {
       }
     );
 
-    // Cleanup
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  // ── nav items ──────────────────────────────────────────
   const navItems = [
     { label: 'Use Cases', href: '/usecases' },
     { label: 'Pricing', href: '/' },
@@ -75,27 +68,10 @@ export function Navigation() {
     { label: 'Dashboard', href: '/languages-board' },
   ];
 
-  // ── auth handlers ─────────────────────────────────────
   const handleSignIn = () => router.push('/login');
-  const handleSignOut = () => {
-    supabase.auth.signOut();
-    router.push('/');
-  };
 
-  const AuthButton = () =>
-    session ? (
-      <Button
-        onClick={handleSignOut}
-        color="inherit"
-        sx={{
-          fontSize: '1.5rem',
-          textTransform: 'capitalize',
-          fontFamily: 'Georgia, Serif',
-        }}
-      >
-        Logout
-      </Button>
-    ) : (
+  const AuthButton = () => (
+    !session && (
       <Button
         onClick={handleSignIn}
         color="inherit"
@@ -107,9 +83,9 @@ export function Navigation() {
       >
         Login
       </Button>
-    );
+    )
+  );
 
-  // ── render ─────────────────────────────────────────────
   return (
     <AppBar position="fixed" color="primary">
       <Toolbar sx={{ justifyContent: 'space-between', mx: 1 }}>
