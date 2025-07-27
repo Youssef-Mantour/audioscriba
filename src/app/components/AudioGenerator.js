@@ -268,7 +268,7 @@ export default function AudioGenerator({ language, voices }) {
       </Box>
 
       {/* Main Content */}
-      <Box sx={{ maxWidth: 1960, mx: 'auto', mt: 5, textAlign: 'center' }}>
+      <Box sx={{ maxWidth: 1960, mx: 'auto', mt: 2, textAlign: 'center' }}>
         <Box
   sx={{
     display: 'flex',
