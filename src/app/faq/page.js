@@ -25,34 +25,26 @@ const faqs = [
       "Our TTS SaaS uses advanced AI models that produce highly realistic and natural-sounding voices.",
   },
   {
-    question: "Can I customize the voice?",
+    question: "Do you support different voices?",
     answer:
-      "Yes, you can adjust the pitch, speed, and tone of the voice to match your preferences.",
+      "Yes, we offer a variety of voices to choose from, including different accents and genders.",
   },
   {
     question: "Do you support multiple languages?",
     answer:
       "Yes, we support several languages, including English, Spanish, French, German, and more.",
   },
-  {
-    question: "Is your service available for both personal and commercial use?",
-    answer:
-      "Yes, our service is suitable for both personal projects and commercial applications.",
-  },
+  
   {
     question: "Can I download the generated audio files?",
     answer:
       "Absolutely! You can download your audio files in various formats, including MP3 and WAV.",
   },
-  {
-    question: "Do I need an API key to use the service?",
-    answer:
-      "Yes, to integrate the service into your applications, you'll need to sign up and get an API key.",
-  },
+  
   {
     question: "Is there a free trial available?",
     answer:
-      "Yes, we offer a free trial with limited features so you can test our service before committing.",
+      "Yes, we offer a free trial with limited number of characters, so you can test our service before committing.",
   },
   {
     question: "How do I contact support for issues?",
