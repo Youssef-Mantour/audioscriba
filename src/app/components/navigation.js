@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import MenuIcon from '@mui/icons-material/Menu';
-import Chip from '@mui/material/Chip';
+import Tooltip from '@mui/material/Tooltip';
 
 // Supabase client (browser‑side)
 const supabase = createClient();
@@ -136,23 +136,39 @@ export function Navigation() {
 
         {/* Desktop links */}
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-          {navItems.map(({ label, href }) => (
-            <Button
-              key={href}
-              href={href}
-              component={Link}
-              color="inherit"
-              sx={{
-                fontSize: '1.5rem',
-                textTransform: 'capitalize',
-                fontFamily: 'Georgia, Serif',
-              }}
-            >
-              {label}
-            </Button>
-          ))}
+          {navItems.map(({ label, href }) => {
+            const isDashboard = label === 'Dashboard';
+            const disabled = isDashboard && !session;
 
-          
+            const button = (
+              <Button
+                key={href}
+                href={disabled ? undefined : href}
+                component={disabled ? 'button' : Link}
+                color="inherit"
+                disabled={disabled}
+                sx={{
+                  fontSize: '1.5rem',
+                  textTransform: 'capitalize',
+                  fontFamily: 'Georgia, Serif',
+                  cursor: disabled ? 'default' : 'pointer',
+                  color: disabled ? 'gray' : 'inherit',
+                  pointerEvents: disabled ? 'none' : 'auto',
+                }}
+              >
+                {label}
+              </Button>
+            );
+
+            return disabled ? (
+              <Tooltip key={href} title="Please log in to access the Dashboard">
+                <span>{button}</span>
+              </Tooltip>
+            ) : (
+              button
+            );
+          })}
+
           <AuthButton />
         </Box>
 
@@ -179,20 +195,38 @@ export function Navigation() {
         sx={{ display: { xs: 'block', md: 'none' }, bgcolor: 'primary.main' }}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', p: 2 }}>
-          {navItems.map(({ label, href }) => (
-            <Button
-              key={href}
-              href={href}
-              component={Link}
-              color="inherit"
-              onClick={() => setMenuOpen(false)}
-              sx={{ justifyContent: 'flex-start', fontSize: '1.2rem' }}
-            >
-              {label}
-            </Button>
-          ))}
+          {navItems.map(({ label, href }) => {
+            const isDashboard = label === 'Dashboard';
+            const disabled = isDashboard && !session;
 
-          
+            const button = (
+              <Button
+                key={href}
+                href={disabled ? undefined : href}
+                component={disabled ? 'button' : Link}
+                color="inherit"
+                onClick={() => setMenuOpen(false)}
+                disabled={disabled}
+                sx={{
+                  justifyContent: 'flex-start',
+                  fontSize: '1.2rem',
+                  cursor: disabled ? 'default' : 'pointer',
+                  color: disabled ? 'gray' : 'inherit',
+                  pointerEvents: disabled ? 'none' : 'auto',
+                }}
+              >
+                {label}
+              </Button>
+            );
+
+            return disabled ? (
+              <Tooltip key={href} title="Please log in to access the Dashboard">
+                <span>{button}</span>
+              </Tooltip>
+            ) : (
+              button
+            );
+          })}
 
           <AuthButton />
         </Box>

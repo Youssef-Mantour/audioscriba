@@ -293,7 +293,7 @@ export default function AudioGenerator({ language, voices }) {
     onClick={generateAndPlayAudio}
     disabled={loading}
   >
-    {loading ? <CircularProgress size={24} /> : 'Generate Audio'}
+    {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
   </Button>
 </Box>
 
