@@ -280,7 +280,7 @@ export default function AudioGenerator({ language, voices }) {
 >
   <LanguageBord />
   <Typography
-  variant="h5"
+  variant="h4"
   gutterBottom
   style={{ fontFamily: "'Dancing Script', cursive" }}
 >
