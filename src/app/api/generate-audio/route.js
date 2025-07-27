@@ -16,13 +16,20 @@ export async function POST(request) {
       }),
     });
 
-    if (!response.ok) {
+    /* if (!response.ok) {
       const errorText = await response.text();
       return new Response(JSON.stringify({ error: errorText }), {
         status: response.status,
         headers: { "Content-Type": "application/json" },
       });
-    }
+    } */
+   if (!response.ok) {
+  const customMessage = "Something goes wrong try another time";
+  return new Response(customMessage, {
+    headers: { "Content-Type": "text/plain" },
+  });
+}
+
 
     const arrayBuffer = await response.arrayBuffer();
 
