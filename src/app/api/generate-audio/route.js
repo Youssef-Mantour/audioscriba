@@ -24,10 +24,13 @@ export async function POST(request) {
       });
     } */
    if (!response.ok) {
-  const customMessage = "Something goes wrong try another time";
-  return new Response(customMessage, {
-    headers: { "Content-Type": "text/plain" },
+  const customMessage = { error: "Something goes wrong, try another time" };
+  return new Response(JSON.stringify(customMessage), {
+    
+    headers: { "Content-Type": "application/json" },
   });
+}
+
 }
 
 
