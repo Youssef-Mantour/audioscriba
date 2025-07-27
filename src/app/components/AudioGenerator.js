@@ -289,9 +289,9 @@ export default function AudioGenerator({ language, voices }) {
   </Button>
 </Box>
 
-        <Typography variant="h3" gutterBottom className={tinos.className}>
-          Text-to-Speech Audio Generator
-        </Typography>
+        <Typography className={`${tinos.className} dancingScriptFallback`} variant="h5" gutterBottom>
+  Text-to-Speech Audio Generator
+</Typography>
 
         <VoiceSelector selectedVoice={selectedVoice} handleVoiceChange={handleVoiceChange} voices={voices} />
         <FormatSelector responseFormat={responseFormat} handleFormatChange={handleFormatChange} />
