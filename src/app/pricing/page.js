@@ -1,40 +1,89 @@
 "use client";
 
-import { CheckCircle } from "lucide-react";
+import {
+  Box,
+  Container,
+  Typography,
+  Paper,
+  Stack,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Button,
+  useTheme,
+} from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export default function PricingPage() {
-  return (
-    <div className="min-h-screen bg-gray-100 py-20 px-4">
-      <div className="max-w-3xl mx-auto text-center">
-        <h1 className="text-4xl font-bold mb-4">Pricing</h1>
-        <p className="text-lg text-gray-600 mb-10">
-          Simple and transparent pricing. Get 1,000,000 characters for just $7.
-        </p>
+  const theme = useTheme();
 
-        <div className="bg-white shadow-xl rounded-2xl p-6">
-          <div className="flex flex-col items-center gap-4">
-            <h2 className="text-3xl font-semibold">1,000,000 Credits</h2>
-            <p className="text-gray-500">Only $7</p>
-            <ul className="text-left space-y-2 mt-4">
-              <li className="flex items-center gap-2">
-                <CheckCircle className="text-green-500 w-4 h-4" />
-                Use for Text-to-Speech generation
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="text-green-500 w-4 h-4" />
-                No expiration
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="text-green-500 w-4 h-4" />
-                Instant access
-              </li>
-            </ul>
-            <button className="mt-6 w-full max-w-xs bg-black text-white py-2 px-4 rounded-lg text-lg font-medium hover:bg-gray-900 transition">
+  return (
+    <Box
+      sx={{
+        minHeight: "100vh",
+        bgcolor: theme.palette.grey[20],
+        py: 5,
+        px: 0,
+        display: "flex",
+        //alignItems: "center",
+        //justifyContent: "center",
+      }}
+    >
+      <Container maxWidth="sm" sx={{ textAlign: "center" }}>
+        {/* <Typography variant="h3" fontWeight="bold" mb={2}>
+          Pricing
+        </Typography> */}
+        {/* <Typography variant="h6" color="text.secondary" mb={2}>
+          Simple and transparent pricing. Get 1,000,000 characters for just $7.
+        </Typography>
+ */}
+        <Paper
+          elevation={15}
+          sx={{
+            borderRadius: 4,
+            p: 5,
+            bgcolor: "background.paper",
+          }}
+        >
+          <Stack spacing={3} alignItems="center">
+            <Typography variant="h4" fontWeight={600}>
+              1,000,000 Credits
+            </Typography>
+            <Typography variant="h5" color="text.secondary">
+              Only $7
+            </Typography>
+
+            <List sx={{ width: "100%" }}>
+              {[
+                "Use for Text-to-Speech generation",
+                "No expiration",
+                "Instant access",
+              ].map((text) => (
+                <ListItem key={text} disableGutters>
+                  <ListItemIcon sx={{ minWidth: 36 }}>
+                    <CheckCircleIcon sx={{ color: "success.main" }} />
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              ))}
+            </List>
+
+            <Button
+              variant="contained"
+              size="large"
+              sx={{
+                borderRadius: 2,
+                px: 6,
+                textTransform: "none",
+                fontWeight: "medium",
+              }}
+            >
               Buy Now
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Button>
+          </Stack>
+        </Paper>
+      </Container>
+    </Box>
   );
 }
