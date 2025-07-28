@@ -15,7 +15,6 @@ import Collapse from '@mui/material/Collapse';
 import MenuIcon from '@mui/icons-material/Menu';
 import Tooltip from '@mui/material/Tooltip';
 
-// Supabase client (browser-side)
 const supabase = createClient();
 
 export function Navigation() {
@@ -23,7 +22,7 @@ export function Navigation() {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [session, setSession] = useState(null);
-  const [credits, setCredits] = useState(null); // null = guest
+  const [credits, setCredits] = useState(null);
 
   useEffect(() => {
     const fetchCredits = async (userId) => {
@@ -60,17 +59,14 @@ export function Navigation() {
   }, []);
 
   const navItems = [
-    { label: 'Use Cases', href: '/usecases' },
-    { label: 'Pricing', href: '/' },
-    { label: 'FAQ', href: '/faq' },
-    { label: 'Blog', href: '/blog' },
-    { label: 'Contact', href: '/contact' },
+    { label: 'Pricing', href: '/pricing' },
+    { label: 'What is it', href: '/' },
     { label: 'Dashboard', href: '/languages-board' },
   ];
 
   const handleSignIn = () => router.push('/login');
 
-  const AuthButton = () => (
+  const AuthButton = () =>
     !session && (
       <Button
         onClick={handleSignIn}
@@ -83,13 +79,12 @@ export function Navigation() {
       >
         Login
       </Button>
-    )
-  );
+    );
 
   return (
     <AppBar position="fixed" color="primary">
       <Toolbar sx={{ justifyContent: 'space-between', mx: 1 }}>
-        {/* Brand */}
+        {/* Logo */}
         <Typography
           variant="h4"
           sx={{ fontWeight: 'bold', fontFamily: 'sans-serif' }}
@@ -99,7 +94,7 @@ export function Navigation() {
           </Link>
         </Typography>
 
-        {/* Burger (mobile) */}
+        {/* Mobile Menu Icon */}
         <IconButton
           edge="start"
           color="inherit"
@@ -110,50 +105,65 @@ export function Navigation() {
           <MenuIcon />
         </IconButton>
 
-        {/* Desktop links */}
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-          {navItems.map(({ label, href }) => {
-            const isDashboard = label === 'Dashboard';
-            const disabled = isDashboard && !session;
+        {/* Desktop Nav + Login */}
+        <Box
+          sx={{
+            display: { xs: 'none', md: 'flex' },
+            flexGrow: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'relative',
+          }}
+        >
+          {/* Centered Nav Links */}
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            {navItems.map(({ label, href }) => {
+              const key = `${label}-${href}`;
+              const isDashboard = label === 'Dashboard';
+              const disabled = isDashboard && !session;
 
-            const button = (
-              <Button
-                key={href}
-                href={disabled ? undefined : href}
-                component={disabled ? 'button' : Link}
-                color="inherit"
-                disabled={disabled}
-                sx={{
-                  fontSize: '1.5rem',
-                  textTransform: 'capitalize',
-                  fontFamily: 'Georgia, Serif',
-                  cursor: disabled ? 'default' : 'pointer',
-                  color: disabled ? 'gray' : 'inherit',
-                  pointerEvents: disabled ? 'none' : 'auto',
-                }}
-              >
-                {label}
-              </Button>
-            );
+              const button = (
+                <Button
+                  key={key}
+                  href={disabled ? undefined : href}
+                  component={disabled ? 'button' : Link}
+                  color="inherit"
+                  disabled={disabled}
+                  sx={{
+                    fontSize: '1.5rem',
+                    textTransform: 'capitalize',
+                    fontFamily: 'Georgia, Serif',
+                    cursor: disabled ? 'default' : 'pointer',
+                    color: disabled ? 'gray' : 'inherit',
+                    pointerEvents: disabled ? 'none' : 'auto',
+                  }}
+                >
+                  {label}
+                </Button>
+              );
 
-            return disabled ? (
-              <Tooltip key={href} title="Please log in to access the Dashboard">
-                <span>{button}</span>
-              </Tooltip>
-            ) : (
-              button
-            );
-          })}
+              return disabled ? (
+                <Tooltip key={key} title="Please log in to access the Dashboard">
+                  <span>{button}</span>
+                </Tooltip>
+              ) : (
+                button
+              );
+            })}
+          </Box>
 
-          <AuthButton />
+          {/* Login Button aligned right */}
+          <Box sx={{ position: 'absolute', right: 0 }}>
+            <AuthButton />
+          </Box>
         </Box>
 
-        {/* Avatar & name */}
+        {/* Avatar */}
         {session?.user && (
           <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
-            <Typography variant="body2" sx={{ mr: 1 }}>
+            {/* <Typography variant="body2" sx={{ mr: 1 }}>
               {session.user.user_metadata.full_name || session.user.email}
-            </Typography>
+            </Typography> */}
             {session.user.user_metadata.avatar_url && (
               <img
                 src={session.user.user_metadata.avatar_url}
@@ -165,19 +175,20 @@ export function Navigation() {
         )}
       </Toolbar>
 
-      {/* Mobile dropdown */}
+      {/* Mobile Dropdown */}
       <Collapse
         in={menuOpen}
         sx={{ display: { xs: 'block', md: 'none' }, bgcolor: 'primary.main' }}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', p: 2 }}>
           {navItems.map(({ label, href }) => {
+            const key = `mobile-${label}-${href}`;
             const isDashboard = label === 'Dashboard';
             const disabled = isDashboard && !session;
 
             const button = (
               <Button
-                key={href}
+                key={key}
                 href={disabled ? undefined : href}
                 component={disabled ? 'button' : Link}
                 color="inherit"
@@ -196,14 +207,13 @@ export function Navigation() {
             );
 
             return disabled ? (
-              <Tooltip key={href} title="Please log in to access the Dashboard">
+              <Tooltip key={key} title="Please log in to access the Dashboard">
                 <span>{button}</span>
               </Tooltip>
             ) : (
               button
             );
           })}
-
           <AuthButton />
         </Box>
       </Collapse>
