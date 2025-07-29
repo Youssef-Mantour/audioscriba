@@ -1,6 +1,6 @@
 "use client";
 
-import { Container, Typography, Button, Box, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { Container, Typography, Button, Box, Link, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export default function HomePage() {
@@ -39,9 +39,11 @@ export default function HomePage() {
       </Box>
 
       <Box textAlign="center">
-        <Button variant="contained" color="primary" size="large">
-          Get Started
-        </Button>
+       <Link href="/login" passHref legacyBehavior>
+  <Button variant="contained" color="primary" size="large" component="a">
+    Get Started
+  </Button>
+</Link>
       </Box>
     </Container>
   );
