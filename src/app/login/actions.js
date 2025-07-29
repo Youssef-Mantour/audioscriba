@@ -19,7 +19,7 @@ export async function login(formData) {
     return redirect('/error');
   }
 
-  revalidatePath('/', 'layout');
+  revalidatePath('/', '/layout');
   redirect('/languages-board/');
   
 }
@@ -38,7 +38,7 @@ export async function signup(formData) {
     return redirect('/error');
   }
 
-  revalidatePath('/', 'layout');
+  revalidatePath('/', '/layout');
   redirect('/');
 }
 
