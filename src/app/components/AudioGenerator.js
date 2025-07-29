@@ -83,7 +83,7 @@ export default function AudioGenerator({ language, voices }) {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    window.location.reload();
+    window.location.href = '/login'; // ✅ redirect instead of reload
   };
 
   const handleInputChange = (e) => setInputText(e.target.value);
