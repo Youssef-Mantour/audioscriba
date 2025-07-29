@@ -1,21 +1,48 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Page() {
+import { Container, Typography, Button, Box, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
+export default function HomePage() {
   return (
-    <main className="container mx-auto p-4">
-      <h1 className="text-4xl font-bold">Welcome to My App</h1>
-      <Image
-        src="/globe.svg" // Path to the image (e.g., in the public folder)
-        alt="A beautiful example"
-        width={500} // Desired width of the image
-        height={400} // Desired height of the image
-        className="rounded-lg shadow-md"
-      />
-      <p className="mt-4 text-lg">Discover amazing features and explore now.</p>
-      <button className="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg">
-        Get Started
-      </button>
-    </main>
+    <Container maxWidth="md" sx={{ py: 10 }}>
+      <Box textAlign="center" mb={6}>
+        <Typography variant="h3" component="h1" color="primary" gutterBottom>
+          Welcome to txtvoxai
+        </Typography>
+        <Typography variant="h6" color="text.secondary">
+          Turn any text into realistic, natural-sounding speech using our AI-powered TTS technology.
+        </Typography>
+      </Box>
+
+      <Box mb={6}>
+        <Typography variant="h5" gutterBottom>
+          Why choose txtvoxai?
+        </Typography>
+        <List>
+          {[
+            "Realistic voices with cutting-edge AI",
+            "Multiple languages and accents",
+            "Download audio in MP3 or WAV",
+            "Flexible voice options (male/female)",
+            "Free trial with limited characters",
+            "Friendly support via email & chat"
+          ].map((item, index) => (
+            <ListItem key={index}>
+              <ListItemIcon>
+                <CheckCircleIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText primary={item} />
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+
+      <Box textAlign="center">
+        <Button variant="contained" color="primary" size="large">
+          Get Started
+        </Button>
+      </Box>
+    </Container>
   );
 }
