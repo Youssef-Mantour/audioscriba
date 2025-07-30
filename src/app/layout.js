@@ -1,6 +1,7 @@
 'use client';
-import { GoogleAnalytics } from 'nextjs-google-analytics';
+
 import { useState, useEffect } from 'react';
+import TagManager from 'react-gtm-module';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Navigation } from '@/components/navigation';
@@ -47,6 +48,13 @@ export default function RootLayout({ children }) {
   const [themeMode, setThemeMode] = useState(prefersDarkMode ? 'dark' : 'light');
 
   useEffect(() => {
+    const GTM_ID = process.env.NEXT_PUBLIC_TM_ID;
+    if (GTM_ID) {
+      TagManager.initialize({ gtmId: GTM_ID });
+    }
+  }, []);
+
+  useEffect(() => {
     setThemeMode(prefersDarkMode ? 'dark' : 'light');
   }, [prefersDarkMode]);
 
@@ -60,21 +68,15 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        {/* Google Analytics */}
         <link
-  href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap"
-  rel="stylesheet"
-/>
-
-        
+          href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
       </head>
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} trackPageViews strategy="lazyOnload" />
-
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          
 
           {/* AppBar */}
           <AppBar position="static" color="primary">
@@ -93,8 +95,6 @@ export default function RootLayout({ children }) {
 
           {/* Main Content */}
           <Container maxWidth="lg" sx={{ mt: 2, minHeight: '80vh' }}>
-            
-            
             {children}
           </Container>
 
