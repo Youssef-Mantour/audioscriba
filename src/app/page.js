@@ -5,6 +5,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export default function HomePage() {
   return (
+
+    
     <Container maxWidth="md" sx={{ py: 10 }}>
       <Box textAlign="center" mb={6}>
         <Typography variant="h3" component="h1" color="primary" gutterBottom>
@@ -40,9 +42,9 @@ export default function HomePage() {
 
       <Box textAlign="center">
        <Link href="/login" passHref legacyBehavior>
-  <Button variant="contained" color="primary" size="large" component="a">
+  
     Get Started
-  </Button>
+  
 </Link>
       </Box>
     </Container>

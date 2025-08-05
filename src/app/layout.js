@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import TagManager from 'react-gtm-module';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
+import { getTheme } from '@/components/theme';
 
 import {
   CssBaseline,
@@ -14,38 +15,15 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  IconButton,
-  useMediaQuery,
 } from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { ThemeProvider } from '@mui/material/styles';
 
 // Load Google Fonts
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
 
-// Theme factory
-const getTheme = (mode) =>
-  createTheme({
-    palette: {
-      mode,
-      primary: { main: mode === 'light' ? '#009688' : '#80cbc4' },
-      secondary: { main: mode === 'light' ? '#616161' : '#bdbdbd' },
-      background: {
-        default: mode === 'light' ? '#ffffff' : '#121212',
-        paper: mode === 'light' ? '#f5f5f5' : '#1e1e1e',
-      },
-      text: { primary: mode === 'light' ? '#000000' : '#ffffff' },
-    },
-    typography: {
-      fontFamily: 'var(--font-geist-sans), sans-serif',
-    },
-  });
-
 export default function RootLayout({ children }) {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const [themeMode, setThemeMode] = useState(prefersDarkMode ? 'dark' : 'light');
+  const theme = getTheme('light'); // fixed to 'light' mode
 
   useEffect(() => {
     const GTM_ID = process.env.NEXT_PUBLIC_TM_ID;
@@ -53,16 +31,6 @@ export default function RootLayout({ children }) {
       TagManager.initialize({ gtmId: GTM_ID });
     }
   }, []);
-
-  useEffect(() => {
-    setThemeMode(prefersDarkMode ? 'dark' : 'light');
-  }, [prefersDarkMode]);
-
-  const toggleTheme = () => {
-    setThemeMode((prev) => (prev === 'light' ? 'dark' : 'light'));
-  };
-
-  const theme = getTheme(themeMode);
 
   return (
     <html lang="en">
@@ -81,15 +49,10 @@ export default function RootLayout({ children }) {
           {/* AppBar */}
           <AppBar position="static" color="primary">
             <Toolbar>
-              <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                My Next.js App
-              </Typography>
+              
 
               <Navigation />
-
-              <IconButton onClick={toggleTheme} color="inherit">
-                {themeMode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-              </IconButton>
+              {/* Theme toggle removed */}
             </Toolbar>
           </AppBar>
 

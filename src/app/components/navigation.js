@@ -14,84 +14,76 @@ import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import MenuIcon from '@mui/icons-material/Menu';
 import Tooltip from '@mui/material/Tooltip';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+
+import { useTheme } from '@mui/material/styles';
 
 const supabase = createClient();
 
-export function Navigation() {
+export function Navigation({ toggleColorMode }) {
   const router = useRouter();
+  const theme = useTheme();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [session, setSession] = useState(null);
-  const [credits, setCredits] = useState(null);
 
   useEffect(() => {
-    const fetchCredits = async (userId) => {
-      const { data, error } = await supabase
-        .from('user_credits')
-        .select('total_credits, used_credits')
-        .eq('user_id', userId)
-        .single();
-
-      if (!error && data) {
-        setCredits((data.total_credits ?? 0) - (data.used_credits ?? 0));
-      } else {
-        setCredits(null);
-      }
-    };
-
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
-      if (data.session?.user) fetchCredits(data.session.user.id);
     });
 
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, newSession) => {
-        setSession(newSession);
-        if (newSession?.user) {
-          fetchCredits(newSession.user.id);
-        } else {
-          setCredits(null);
-        }
-      }
-    );
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+    });
 
     return () => listener.subscription.unsubscribe();
   }, []);
 
   const navItems = [
-    { label: 'Pricing', href: '/pricing' },
     { label: 'What is it', href: '/' },
+    { label: 'Pricing', href: '/pricing' },
     { label: 'Dashboard', href: '/languages-board' },
   ];
 
   const handleSignIn = () => router.push('/login');
 
-  const AuthButton = () =>
-    !session && (
-      <Button
-        onClick={handleSignIn}
-        color="inherit"
-        sx={{
-          fontSize: '1.5rem',
-          textTransform: 'capitalize',
-          fontFamily: 'Georgia, Serif',
-        }}
-      >
-        Login
-      </Button>
-    );
+  const sharedButtonStyle = {
+    fontSize: '1.3rem',
+    textTransform: 'capitalize',
+    fontFamily: 'Georgia, Serif',
+    color: theme.palette.mode === 'light' ? 'primary.dark' : 'primary.light',
+    px: 1.2,
+    py: 1.2,
+    borderRadius: '10px',
+    boxShadow: '0px 6px 12px rgba(3, 9, 4, 0.75)',
+    transition: 'all 0.3s ease-in-out',
+    '&:hover': {
+      transform: 'scale(1.1)',
+    },
+  };
 
   return (
-    <AppBar position="fixed" color="primary">
+    <AppBar
+      position="fixed"
+      elevation={0}
+      sx={{
+        backgroundColor: 'white',
+        pt: 1,
+      }}
+    >
       <Toolbar sx={{ justifyContent: 'space-between', mx: 1 }}>
         {/* Logo */}
         <Typography
-          variant="h4"
-          sx={{ fontWeight: 'bold', fontFamily: 'sans-serif' }}
+          variant="h3"
+          sx={{
+            fontWeight: 'bold',
+            fontFamily: 'sans-serif',
+            color: theme.palette.text.primary,
+            fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' },
+          }}
         >
-          <Link href="/" style={{ fontSize: '1.5rem' }}>
-            TxtVoxAI
-          </Link>
+          <Link href="/">TxtVoxAI</Link>
         </Typography>
 
         {/* Mobile Menu Icon */}
@@ -105,72 +97,64 @@ export function Navigation() {
           <MenuIcon />
         </IconButton>
 
-        {/* Desktop Nav + Login */}
+        {/* Desktop Nav Items */}
         <Box
           sx={{
+            gap: 2,
             display: { xs: 'none', md: 'flex' },
             flexGrow: 1,
-            justifyContent: 'center',
+            justifyContent: 'right',
             alignItems: 'center',
-            position: 'relative',
           }}
         >
-          {/* Centered Nav Links */}
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            {navItems.map(({ label, href }) => {
-              const key = `${label}-${href}`;
-              const isDashboard = label === 'Dashboard';
-              const disabled = isDashboard && !session;
+          {navItems.map(({ label, href }) => {
+            const key = `${label}-${href}`;
+            const isDashboard = label === 'Dashboard';
+            const disabled = isDashboard && !session;
 
-              const button = (
-                <Button
-                  key={key}
-                  href={disabled ? undefined : href}
-                  component={disabled ? 'button' : Link}
-                  color="inherit"
-                  disabled={disabled}
-                  sx={{
-                    fontSize: '1.5rem',
-                    textTransform: 'capitalize',
-                    fontFamily: 'Georgia, Serif',
-                    cursor: disabled ? 'default' : 'pointer',
-                    color: disabled ? 'gray' : 'inherit',
-                    pointerEvents: disabled ? 'none' : 'auto',
-                  }}
-                >
-                  {label}
-                </Button>
-              );
+            const button = (
+              <Button
+                key={key}
+                href={disabled ? undefined : href}
+                component={disabled ? 'button' : Link}
+                disabled={disabled}
+                sx={{
+                  ...sharedButtonStyle,
+                  cursor: disabled ? 'not-allowed' : 'pointer',
+                  opacity: disabled ? 0.5 : 1,
+                }}
+              >
+                {label}
+              </Button>
+            );
 
-              return disabled ? (
-                <Tooltip key={key} title="Please log in to access the Dashboard">
-                  <span>{button}</span>
-                </Tooltip>
-              ) : (
-                button
-              );
-            })}
-          </Box>
+            return disabled ? (
+              <Tooltip key={key} title="Please log in to access the Dashboard">
+                <span>{button}</span>
+              </Tooltip>
+            ) : (
+              button
+            );
+          })}
 
-          {/* Login Button aligned right */}
-          <Box sx={{ position: 'absolute', right: 0 }}>
-            <AuthButton />
-          </Box>
+          {!session && (
+            <Button onClick={handleSignIn} sx={sharedButtonStyle}>
+              Login
+            </Button>
+          )}
+
+          {/* Light/Dark Toggle */}
+          
         </Box>
 
         {/* Avatar */}
-        {session?.user && (
+        {session?.user?.user_metadata?.avatar_url && (
           <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
-            {/* <Typography variant="body2" sx={{ mr: 1 }}>
-              {session.user.user_metadata.full_name || session.user.email}
-            </Typography> */}
-            {session.user.user_metadata.avatar_url && (
-              <img
-                src={session.user.user_metadata.avatar_url}
-                alt="avatar"
-                style={{ width: 32, height: 32, borderRadius: '50%' }}
-              />
-            )}
+            <img
+              src={session.user.user_metadata.avatar_url}
+              alt="avatar"
+              style={{ width: 32, height: 32, borderRadius: '50%' }}
+            />
           </Box>
         )}
       </Toolbar>
@@ -191,15 +175,14 @@ export function Navigation() {
                 key={key}
                 href={disabled ? undefined : href}
                 component={disabled ? 'button' : Link}
-                color="inherit"
                 onClick={() => setMenuOpen(false)}
                 disabled={disabled}
                 sx={{
+                  ...sharedButtonStyle,
                   justifyContent: 'flex-start',
                   fontSize: '1.2rem',
-                  cursor: disabled ? 'default' : 'pointer',
-                  color: disabled ? 'gray' : 'inherit',
-                  pointerEvents: disabled ? 'none' : 'auto',
+                  width: '100%',
+                  color: 'white',
                 }}
               >
                 {label}
@@ -214,7 +197,21 @@ export function Navigation() {
               button
             );
           })}
-          <AuthButton />
+
+          {!session && (
+            <Button onClick={handleSignIn} sx={{ ...sharedButtonStyle, color: 'white' }}>
+              Login
+            </Button>
+          )}
+
+          {/* Light/Dark Toggle Mobile */}
+          <IconButton
+            sx={{ mt: 2 }}
+            onClick={toggleColorMode}
+            color="inherit"
+          >
+            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
         </Box>
       </Collapse>
     </AppBar>

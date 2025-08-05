@@ -18,11 +18,11 @@ export const Footer = () => {
     <Box
       component="footer"
       sx={{
-        py: 4,
-        px: 2,
-        mt: "auto",
-        backgroundColor: (theme) =>
-          theme.palette.mode === "light" ? theme.palette.grey[200] : theme.palette.grey[800],
+        py: 0,
+        px: 0,
+        mt:-2,
+        mb:-2,
+        backgroundColor: "rgba(238, 236, 236, 1)",
       }}
     >
       <Container maxWidth="sm" sx={{ textAlign: "center" }}>
