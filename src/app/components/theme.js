@@ -1,29 +1,8 @@
 
-import createTheme from '@mui/material/styles/createTheme';
-export const getTheme = (mode) =>
-  createTheme({
-    palette: {
-    mode: mode,
-    primary: {
-      main: '#073f0eff', // blue
-      contrastText: '#ffffff',
-    },
-    secondary: {
-      main: '#6fa67aff', // purple
-    },
-    error: {
-      main: '#f44336',
-    },
-    background: {
-      default: '#f5f7fa',
-      paper: '#ffffff',
-    },
-    text: {
-      primary: '#333333',
-      secondary: '#555555',
-    },
-  },
+import { createTheme } from '@mui/material/styles';
 
+// Shared options for both themes
+const commonOptions = {
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     fontSize: 14,
@@ -37,9 +16,7 @@ export const getTheme = (mode) =>
     subtitle2: { fontSize: '0.75rem', fontWeight: 400 },
     button: { textTransform: 'none', fontWeight: 500 },
   },
-
-  spacing: 8, // base spacing unit (1 = 8px)
-
+  spacing: 8,
   breakpoints: {
     values: {
       xs: 0,
@@ -49,7 +26,6 @@ export const getTheme = (mode) =>
       xl: 1536,
     },
   },
-
   zIndex: {
     appBar: 1200,
     drawer: 1100,
@@ -57,7 +33,6 @@ export const getTheme = (mode) =>
     snackbar: 1400,
     tooltip: 1500,
   },
-
   transitions: {
     duration: {
       shortest: 150,
@@ -75,7 +50,6 @@ export const getTheme = (mode) =>
       sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
     },
   },
-
   components: {
     MuiButton: {
       styleOverrides: {
@@ -112,5 +86,59 @@ export const getTheme = (mode) =>
       },
     },
   },
-  });
-  
+};
+
+// Light Theme
+export const lightTheme = createTheme({
+  ...commonOptions,
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#073f0eff',
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      main: '#6fa67aff',
+    },
+    error: {
+      main: '#f44336',
+    },
+    background: {
+      default: '#f5f7fa',
+      paper: '#ffffff',
+    },
+    text: {
+      primary: '#333333',
+      secondary: '#555555',
+    },
+  },
+});
+
+// Dark Theme
+export const darkTheme = createTheme({
+  ...commonOptions,
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#073f0eff',
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      main: '#6fa67aff',
+    },
+    error: {
+      main: '#f44336',
+    },
+    background: {
+      default: '#121212',
+      paper: '#1e1e1e',
+    },
+    text: {
+      primary: '#ffffff',
+      secondary: '#cccccc',
+    },
+  },
+});
+
+// Theme getter function (optional)
+export const getTheme = (mode) => (mode === 'dark' ? darkTheme : lightTheme);

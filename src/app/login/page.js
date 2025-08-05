@@ -13,7 +13,7 @@ export default function LoginPage() {
       component="form"
       noValidate
       autoComplete="off"
-      sx={{ maxWidth: 360, mx: 'auto', mt:5, p: 2 }}
+      sx={{ maxWidth: 360, mx: 'auto', mt:10, p: 2 }}
     >
       <Stack spacing={2}>
         <TextField

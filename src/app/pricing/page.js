@@ -28,6 +28,7 @@ export default function PricingPage() {
         display: "flex",
         //alignItems: "center",
         //justifyContent: "center",
+        mt: 10,
       }}
     >
       <Container maxWidth="sm" sx={{ textAlign: "center" }}>
