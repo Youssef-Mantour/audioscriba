@@ -26,15 +26,11 @@ export const Footer = () => {
       }}
     >
       <Container maxWidth="sm" sx={{ textAlign: "center" }}>
-      <Typography variant="body1" color="text.secondary" align="center" >
-        <Link href="/contact" style={{ textDecoration: 'none', fontWeight: 'bold' }}>
-          Contact
-        </Link>
-        </Typography>
+      
         
         
 
-        <Stack direction="row" spacing={2} justifyContent="center" mt={2}>
+        <Stack direction="row" spacing={2} justifyContent="center" mt={0}>
           <IconButton
             component="a"
             href="https://x.com/MantourYoussef"

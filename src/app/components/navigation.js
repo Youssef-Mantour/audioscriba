@@ -16,7 +16,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Tooltip from '@mui/material/Tooltip';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-
 import { useTheme } from '@mui/material/styles';
 
 const supabase = createClient();
@@ -44,6 +43,7 @@ export function Navigation({ toggleColorMode }) {
     { label: 'What is it', href: '/' },
     { label: 'Pricing', href: '/pricing' },
     { label: 'Dashboard', href: '/languages-board' },
+    { label: 'Contact', href: '/contact' },
   ];
 
   const handleSignIn = () => router.push('/login');
@@ -68,7 +68,7 @@ export function Navigation({ toggleColorMode }) {
       position="fixed"
       elevation={0}
       sx={{
-        backgroundColor: 'white',
+        backgroundColor: theme.palette.background.default,
         pt: 1,
       }}
     >
@@ -89,7 +89,7 @@ export function Navigation({ toggleColorMode }) {
         {/* Mobile Menu Icon */}
         <IconButton
           edge="start"
-          color="inherit"
+          color="black"
           aria-label="menu"
           onClick={() => setMenuOpen(!menuOpen)}
           sx={{ display: { xs: 'block', md: 'none' } }}
@@ -103,7 +103,7 @@ export function Navigation({ toggleColorMode }) {
             gap: 2,
             display: { xs: 'none', md: 'flex' },
             flexGrow: 1,
-            justifyContent: 'right',
+            justifyContent: 'flex-end',
             alignItems: 'center',
           }}
         >
@@ -143,20 +143,22 @@ export function Navigation({ toggleColorMode }) {
             </Button>
           )}
 
-          {/* Light/Dark Toggle */}
-          
-        </Box>
+          {/* Light/Dark Toggle (Desktop) */}
+          <IconButton onClick={toggleColorMode} sx={{ ml: 1 }}>
+            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
 
-        {/* Avatar */}
-        {session?.user?.user_metadata?.avatar_url && (
-          <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
-            <img
-              src={session.user.user_metadata.avatar_url}
-              alt="avatar"
-              style={{ width: 32, height: 32, borderRadius: '50%' }}
-            />
-          </Box>
-        )}
+          {/* Avatar (Desktop Only) */}
+          {session?.user?.user_metadata?.avatar_url && (
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', ml: 2 }}>
+              <img
+                src={session.user.user_metadata.avatar_url}
+                alt="avatar"
+                style={{ width: 32, height: 32, borderRadius: '50%' }}
+              />
+            </Box>
+          )}
+        </Box>
       </Toolbar>
 
       {/* Mobile Dropdown */}
@@ -204,11 +206,10 @@ export function Navigation({ toggleColorMode }) {
             </Button>
           )}
 
-          {/* Light/Dark Toggle Mobile */}
+          {/* Light/Dark Toggle (Mobile) */}
           <IconButton
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, color: 'white' }}
             onClick={toggleColorMode}
-            color="inherit"
           >
             {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>

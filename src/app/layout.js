@@ -3,21 +3,17 @@
 import { useEffect, useState } from 'react';
 import TagManager from 'react-gtm-module';
 import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
 import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
-import ThemeToggle from '@/components/ThemeToggle';
 import { getTheme } from '@/components/theme';
 
 import {
   CssBaseline,
   Container,
   Box,
-  AppBar,
-  Toolbar,
   useMediaQuery,
+  ThemeProvider,
 } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
 
 // Google Fonts
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
@@ -70,18 +66,10 @@ export default function RootLayout({ children }) {
         <ThemeProvider theme={theme}>
           <CssBaseline />
 
-          {/* AppBar */}
-          
-           
-            <Box>
-                     <ThemeToggle  mode={mode} toggleTheme={toggleTheme} />
-              <Navigation />
-              
-
-            </Box>
-              
-                 
-           
+          {/* Navigation with toggle */}
+          <Box>
+            <Navigation toggleColorMode={toggleTheme} mode={mode} />
+          </Box>
 
           {/* Main Content */}
           <Container maxWidth="lg" sx={{ mt: 2, minHeight: '80vh' }}>

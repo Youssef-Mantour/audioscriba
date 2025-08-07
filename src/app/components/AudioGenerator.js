@@ -304,7 +304,7 @@ export default function AudioGenerator({ language, voices }) {
 
         <VoiceSelector selectedVoice={selectedVoice} handleVoiceChange={handleVoiceChange} voices={voices} />
         <FormatSelector responseFormat={responseFormat} handleFormatChange={handleFormatChange} />
-        <TextInput inputText={inputText} handleInputChange={handleInputChange} />
+        <TextInput inputText={inputText} handleInputChange={handleInputChange}  sx={{ width: '100%' }}/>
 
         {error && (
           <Typography color="error" sx={{ mt: 2 }}>
