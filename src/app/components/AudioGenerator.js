@@ -204,6 +204,7 @@ export default function AudioGenerator({ language, voices }) {
           m: 2,
           overflowY: 'auto',
           maxHeight: '90vh',
+          resize: 'both',
         }}
       >
         <Typography variant="h6" gutterBottom>Welcome</Typography>
@@ -236,6 +237,7 @@ export default function AudioGenerator({ language, voices }) {
                 <strong>Credits:</strong> Loading...
               </Typography>
             )}
+            <LanguageBord />
 <VoiceSelector selectedVoice={selectedVoice} handleVoiceChange={handleVoiceChange} voices={voices} />
         <FormatSelector responseFormat={responseFormat} handleFormatChange={handleFormatChange} />
             <Button
@@ -279,7 +281,7 @@ export default function AudioGenerator({ language, voices }) {
     mt: 2,
   }}
 >
-  <LanguageBord />
+  
   <Typography
   variant="h4"
   gutterBottom
