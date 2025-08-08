@@ -7,10 +7,10 @@ import FormatSelector from '../components/FormatSelector';
 import TextInput from '../components/TextInput';
 import AudioPlayer from '../components/AudioPlayer';
 import LanguageBord from '@/languages-board/page';
-import { Dancing_Script } from 'next/font/google';
+//import { Dancing_Script } from 'next/font/google';
 import { createClient } from '@/utils/supabase/client';
 
-const tinos = Dancing_Script({ weight: '700', subsets: ['latin'] });
+//const tinos = Dancing_Script({ weight: '700', subsets: ['latin'] });
 const supabase = createClient();
 
 export default function AudioGenerator({ language, voices }) {
@@ -236,7 +236,8 @@ export default function AudioGenerator({ language, voices }) {
                 <strong>Credits:</strong> Loading...
               </Typography>
             )}
-
+<VoiceSelector selectedVoice={selectedVoice} handleVoiceChange={handleVoiceChange} voices={voices} />
+        <FormatSelector responseFormat={responseFormat} handleFormatChange={handleFormatChange} />
             <Button
               variant="outlined"
               color="error"
@@ -302,8 +303,7 @@ export default function AudioGenerator({ language, voices }) {
 
         
 
-        <VoiceSelector selectedVoice={selectedVoice} handleVoiceChange={handleVoiceChange} voices={voices} />
-        <FormatSelector responseFormat={responseFormat} handleFormatChange={handleFormatChange} />
+        
         <TextInput inputText={inputText} handleInputChange={handleInputChange}  sx={{ width: '100%' }}/>
 
         {error && (
