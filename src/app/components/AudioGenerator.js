@@ -1,16 +1,20 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { Button, CircularProgress, Typography, Box, Chip } from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Typography,
+  Box,
+  Chip,
+} from '@mui/material';
 import VoiceSelector from '../components/VoiceSelector';
 import FormatSelector from '../components/FormatSelector';
 import TextInput from '../components/TextInput';
 import AudioPlayer from '../components/AudioPlayer';
 import LanguageBord from '@/languages-board/page';
-//import { Dancing_Script } from 'next/font/google';
 import { createClient } from '@/utils/supabase/client';
 
-//const tinos = Dancing_Script({ weight: '700', subsets: ['latin'] });
 const supabase = createClient();
 
 export default function AudioGenerator({ language, voices }) {
@@ -27,7 +31,6 @@ export default function AudioGenerator({ language, voices }) {
 
   const user = session?.user;
 
-  // 🔁 Fetch user's previous audio links
   const fetchAudioLinks = async (userId) => {
     const { data, error } = await supabase
       .from('user_audios')
@@ -83,14 +86,13 @@ export default function AudioGenerator({ language, voices }) {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    window.location.href = '/login'; // ✅ redirect instead of reload
+    window.location.href = '/login';
   };
 
   const handleInputChange = (e) => setInputText(e.target.value);
   const handleVoiceChange = (v) => setSelectedVoice(v);
   const handleFormatChange = (e) => setResponseFormat(e.target.value);
 
-  // Upload audio and get signed URL (valid 1 hour)
   const uploadAudioToSupabase = async (audioBlob, userId) => {
     const fileName = `audio-${Date.now()}.${responseFormat}`;
     const filePath = `${userId}/${fileName}`;
@@ -110,7 +112,7 @@ export default function AudioGenerator({ language, voices }) {
 
     const { data: signedUrlData, error: signedUrlError } = await supabase.storage
       .from('audios')
-      .createSignedUrl(filePath, 60 * 60); // URL valid for 1 hour
+      .createSignedUrl(filePath, 60 * 60);
 
     if (signedUrlError) {
       console.error('Signed URL error:', signedUrlError);
@@ -193,21 +195,23 @@ export default function AudioGenerator({ language, voices }) {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%' , mt:10 }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%', mt: 10 }}>
       {/* Sidebar */}
       <Box
         sx={{
-          width: '250px',
+          width: '300px',
           bgcolor: '#f5f5f5',
-          p: 2,
+          p: 3,
           borderRight: '1px solid #ddd',
           m: 2,
           overflowY: 'auto',
-          maxHeight: '90vh',
-          resize: 'both',
+          borderRadius: 2,
+          boxShadow: 3,
         }}
       >
-        <Typography variant="h6" gutterBottom>Welcome</Typography>
+        <Typography variant="h6" gutterBottom>
+          Welcome
+        </Typography>
 
         {user ? (
           <>
@@ -221,50 +225,54 @@ export default function AudioGenerator({ language, voices }) {
               </Typography>
             )}
 
-            {credits !== null ? (
-              <Box>
-                <Typography variant="body2" gutterBottom>
-                  <strong>Credits:</strong>
-                </Typography>
-                <Chip
-                  label={`💎 ${credits}`}
-                  color="secondary"
-                  sx={{ my: 0, display: "inline" }}
-                />
-              </Box>
-            ) : (
+            <Box mt={2}>
               <Typography variant="body2" gutterBottom>
-                <strong>Credits:</strong> Loading...
+                <strong>Credits:</strong>
               </Typography>
-            )}
-            <LanguageBord />
-<VoiceSelector selectedVoice={selectedVoice} handleVoiceChange={handleVoiceChange} voices={voices} />
-        <FormatSelector responseFormat={responseFormat} handleFormatChange={handleFormatChange} />
-             <Button
-    variant="contained"
-    color="primary"
-    onClick={generateAndPlayAudio}
-    disabled={loading}
-    size="small"
-    id="generate-speech-button"
-  >
-    {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
-  </Button>
-            
-            
+              <Chip
+                label={`💎 ${credits !== null ? credits : 'Loading...'}`}
+                color="secondary"
+                sx={{ my: 1 }}
+              />
+            </Box>
+
+            <Box mt={2}>
+              <LanguageBord />
+              <VoiceSelector
+                selectedVoice={selectedVoice}
+                handleVoiceChange={handleVoiceChange}
+                voices={voices}
+              />
+              <FormatSelector
+                responseFormat={responseFormat}
+                handleFormatChange={handleFormatChange}
+              />
+            </Box>
+
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={generateAndPlayAudio}
+              disabled={loading}
+              fullWidth
+              sx={{ mt: 2 }}
+            >
+              {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
+            </Button>
+
             <Button
               variant="outlined"
               color="error"
               onClick={handleLogout}
+              fullWidth
               sx={{ mt: 2 }}
             >
               Logout
             </Button>
 
-            {/* Render audio links */}
             {audioLinks.length > 0 && (
-              <>
-                <Typography variant="subtitle2" sx={{ mt: 3 }}>
+              <Box mt={3}>
+                <Typography variant="subtitle2" gutterBottom>
                   🎵 Your Audios
                 </Typography>
                 {audioLinks.map((url, i) => (
@@ -274,7 +282,7 @@ export default function AudioGenerator({ language, voices }) {
                     </a>
                   </Box>
                 ))}
-              </>
+              </Box>
             )}
           </>
         ) : (
@@ -283,27 +291,28 @@ export default function AudioGenerator({ language, voices }) {
       </Box>
 
       {/* Main Content */}
-      <Box sx={{ maxWidth: 1960, mx: 'auto', mt: 2, textAlign: 'center' }}>
-        <Box
-  sx={{
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center', // ✅ horizontally center
-    gap: 2, // spacing between items
-    mt: 2,
-  }}
->
-  
-  <Typography
-  variant="h1"
-  gutterBottom
-  style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 'bold' }}
+      <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          px: 3,
+          mt: 4,
+        }}
+      >
+        <Typography
+          variant="h2"
+          sx={{ fontFamily: 'Dancing Script, cursive', fontWeight: 'bold', mb: 3 }}
+        >
+          Text to Speech Generator
+        </Typography>
 
->
-  Text to Speech Generator
-</Typography>
-
- <TextInput inputText={inputText} handleInputChange={handleInputChange}  sx={{ width: '100%' }}/>
+        <TextInput
+          inputText={inputText}
+          handleInputChange={handleInputChange}
+          sx={{ width: '100%', maxWidth: '800px' }}
+        />
 
         {error && (
           <Typography color="error" sx={{ mt: 2 }}>
@@ -311,21 +320,15 @@ export default function AudioGenerator({ language, voices }) {
           </Typography>
         )}
 
-        
-
         {audioUrl && (
-          <AudioPlayer
-            audioUrl={audioUrl}
-            responseFormat={responseFormat}
-            audioRef={audioRef}
-          />
+          <Box sx={{ mt: 3 }}>
+            <AudioPlayer
+              audioUrl={audioUrl}
+              responseFormat={responseFormat}
+              audioRef={audioRef}
+            />
+          </Box>
         )}
-</Box>
-
-        
-
-        
-        
       </Box>
     </Box>
   );
