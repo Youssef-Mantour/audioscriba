@@ -8,6 +8,7 @@ import {
   Box,
   Chip,
 } from '@mui/material';
+import * as ToolpadCore from '@mui/toolpad-core';
 import VoiceSelector from '../components/VoiceSelector';
 import FormatSelector from '../components/FormatSelector';
 import TextInput from '../components/TextInput';
@@ -40,8 +41,6 @@ export default function AudioGenerator({ language, voices }) {
 
     if (!error && data) {
       setAudioLinks(data.map((d) => d.url));
-    } else {
-      console.error('Error fetching audio links:', error);
     }
   };
 
@@ -55,8 +54,6 @@ export default function AudioGenerator({ language, voices }) {
 
       if (!error && data) {
         setCredits((data.total_credits ?? 0) - (data.used_credits ?? 0));
-      } else {
-        setCredits(null);
       }
     };
 
@@ -195,48 +192,29 @@ export default function AudioGenerator({ language, voices }) {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%', mt: 10 }}>
-      {/* Sidebar */}
-      <Box
-        sx={{
-          width: '300px',
-          bgcolor: '#f5f5f5',
-          p: 3,
-          borderRight: '1px solid #ddd',
-          m: 2,
-          overflowY: 'auto',
-          borderRadius: 2,
-          boxShadow: 3,
-        }}
-      >
-        <Typography variant="h6" gutterBottom>
-          Welcome
-        </Typography>
+    <ToolpadCore.AppProvider
+      navigation={[
+        { kind: 'page', title: 'Text to Speech', icon: <ToolpadCore.MicIcon /> },
+        { kind: 'page', title: 'My Audios', icon: <ToolpadCore.LibraryMusicIcon /> },
+      ]}
+    >
+      <ToolpadCore.DashboardLayout>
+        <Box sx={{ p: 3 }}>
+          <Typography variant="h4" gutterBottom>
+            Text to Speech Generator
+          </Typography>
 
-        {user ? (
-          <>
-            <Typography variant="body2" gutterBottom>
-              <strong>Email:</strong> {user.email}
-            </Typography>
-
-            {user.user_metadata?.full_name && (
-              <Typography variant="body2" gutterBottom>
-                <strong>Name:</strong> {user.user_metadata.full_name}
-              </Typography>
-            )}
-
-            <Box mt={2}>
-              <Typography variant="body2" gutterBottom>
-                <strong>Credits:</strong>
+          {user ? (
+            <>
+              <Typography variant="body2">
+                <strong>Email:</strong> {user.email}
               </Typography>
               <Chip
                 label={`💎 ${credits !== null ? credits : 'Loading...'}`}
                 color="secondary"
                 sx={{ my: 1 }}
               />
-            </Box>
 
-            <Box mt={2}>
               <LanguageBord />
               <VoiceSelector
                 selectedVoice={selectedVoice}
@@ -247,96 +225,59 @@ export default function AudioGenerator({ language, voices }) {
                 responseFormat={responseFormat}
                 handleFormatChange={handleFormatChange}
               />
-            </Box>
 
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={generateAndPlayAudio}
-              disabled={loading}
-              fullWidth
-              sx={{ mt: 2 }}
-            >
-              {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
-            </Button>
+              <TextInput
+                inputText={inputText}
+                handleInputChange={handleInputChange}
+              />
 
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={handleLogout}
-              fullWidth
-              sx={{ mt: 2 }}
-            >
-              Logout
-            </Button>
+              {error && <Typography color="error">{error}</Typography>}
 
-            {audioLinks.length > 0 && (
-              <Box mt={3}>
-                <Typography variant="subtitle2" gutterBottom>
-                  🎵 Your Audios
-                </Typography>
-                {audioLinks.map((url, i) => (
-                  <Box key={i} sx={{ my: 1 }}>
-                    <a href={url} target="_blank" rel="noopener noreferrer">
-                      Audio {i + 1}
-                    </a>
-                  </Box>
-                ))}
-              </Box>
-            )}
-          </>
-        ) : (
-          <Typography variant="body2">Not signed in</Typography>
-        )}
-      </Box>
+              {audioUrl && (
+                <AudioPlayer
+                  audioUrl={audioUrl}
+                  responseFormat={responseFormat}
+                  audioRef={audioRef}
+                />
+              )}
 
-      {/* Main Content */}
-<Box
-  sx={{
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    px: 3,
-    mt: 4,
-    width: '100%', // Ensure container takes full width
-  }}
->
-  <Typography
-    variant="h2"
-    sx={{
-      fontFamily: 'Dancing Script, cursive',
-      fontWeight: 'bold',
-      mb: 3,
-      textAlign: 'center',
-    }}
-  >
-    Text to Speech Generator
-  </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={generateAndPlayAudio}
+                disabled={loading}
+                sx={{ mt: 2 }}
+              >
+                {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
+              </Button>
 
-  <Box sx={{ width: '100%', flexGrow: 1, maxWidth: '1000px', mx: 'auto' }}>
-    <TextInput
-      inputText={inputText}
-      handleInputChange={handleInputChange}
-    />
-  </Box>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={handleLogout}
+                sx={{ mt: 2 }}
+              >
+                Logout
+              </Button>
 
-  {error && (
-    <Typography color="error" sx={{ mt: 2 }}>
-      {error}
-    </Typography>
-  )}
-
-  {audioUrl && (
-    <Box sx={{ mt: 3 }}>
-      <AudioPlayer
-        audioUrl={audioUrl}
-        responseFormat={responseFormat}
-        audioRef={audioRef}
-      />
-    </Box>
-  )}
-</Box>
-
-    </Box>
+              {audioLinks.length > 0 && (
+                <Box mt={3}>
+                  <Typography variant="subtitle2">🎵 Your Audios</Typography>
+                  {audioLinks.map((url, i) => (
+                    <Box key={i}>
+                      <a href={url} target="_blank" rel="noopener noreferrer">
+                        Audio {i + 1}
+                      </a>
+                    </Box>
+                  ))}
+                </Box>
+              )}
+            </>
+          ) : (
+            <Typography>Not signed in</Typography>
+          )}
+        </Box>
+      </ToolpadCore.DashboardLayout>
+    </ToolpadCore.AppProvider>
   );
 }

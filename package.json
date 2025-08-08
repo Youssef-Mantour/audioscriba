@@ -10,10 +10,11 @@
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@microsoft/clarity": "^1.0.0",
     "@mui/icons-material": "^6.4.3",
-    "@mui/material": "^6.4.4",
+    "@mui/material": "^6.5.0",
+    "@mui/toolpad-core": "^0.1.51",
     "@supabase/auth-helpers-react": "^0.5.0",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/ssr": "^0.6.1",
