@@ -240,6 +240,18 @@ export default function AudioGenerator({ language, voices }) {
             <LanguageBord />
 <VoiceSelector selectedVoice={selectedVoice} handleVoiceChange={handleVoiceChange} voices={voices} />
         <FormatSelector responseFormat={responseFormat} handleFormatChange={handleFormatChange} />
+             <Button
+    variant="contained"
+    color="primary"
+    onClick={generateAndPlayAudio}
+    disabled={loading}
+    size="small"
+    id="generate-speech-button"
+  >
+    {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
+  </Button>
+            
+            
             <Button
               variant="outlined"
               color="error"
@@ -291,16 +303,7 @@ export default function AudioGenerator({ language, voices }) {
   Text to Speech Generator
 </Typography>
 
-  <Button
-    variant="contained"
-    color="primary"
-    onClick={generateAndPlayAudio}
-    disabled={loading}
-    size="small"
-    id="generate-speech-button"
-  >
-    {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
-  </Button>
+ 
 </Box>
 
         
