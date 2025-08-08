@@ -303,13 +303,7 @@ export default function AudioGenerator({ language, voices }) {
   Text to Speech Generator
 </Typography>
 
- 
-</Box>
-
-        
-
-        
-        <TextInput inputText={inputText} handleInputChange={handleInputChange}  sx={{ width: '100%' }}/>
+ <TextInput inputText={inputText} handleInputChange={handleInputChange}  sx={{ width: '100%' }}/>
 
         {error && (
           <Typography color="error" sx={{ mt: 2 }}>
@@ -326,6 +320,12 @@ export default function AudioGenerator({ language, voices }) {
             audioRef={audioRef}
           />
         )}
+</Box>
+
+        
+
+        
+        
       </Box>
     </Box>
   );
