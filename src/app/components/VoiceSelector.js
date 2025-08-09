@@ -25,7 +25,7 @@ export default function VoiceSelector({ selectedVoice, handleVoiceChange, voices
               <Avatar
                 src={`/avatars-voice/${voice}.jpg`}
                 alt={voice}
-                sx={{ width: 32, height: 32, mr: 1 }}
+                sx={{ width: 24, height: 16, mr: 1 }}
               />
               <Typography variant="body2">{voice}</Typography>
             </Box>
