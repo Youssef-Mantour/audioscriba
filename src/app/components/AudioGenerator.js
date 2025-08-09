@@ -271,9 +271,7 @@ export default function AudioGenerator({ language, voices }) {
     >
       {audioLinks.length > 0 && (
   <Box sx={{ mt: 1 }}>
-    <Typography variant="subtitle2" gutterBottom>
-      🎵 My speeches
-    </Typography>
+    
     <Box
       sx={{
         maxHeight: 200,  // container height shows about 5 items
@@ -289,7 +287,7 @@ export default function AudioGenerator({ language, voices }) {
             rel="noopener noreferrer"
             style={{ color: '#4dabf7' }}
           >
-            Audio {i + 1}
+            Speech {i + 1}
           </a>
         </Box>
       ))}
