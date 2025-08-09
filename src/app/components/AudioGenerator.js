@@ -195,7 +195,7 @@ export default function AudioGenerator({ language, voices }) {
         }}
       >
         <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
-          🎤 Audio Dashboard
+          🎤 Speech Dashboard
         </Typography>
         <Divider sx={{ borderColor: '#444', mb: 2 }} />
 
@@ -221,27 +221,29 @@ export default function AudioGenerator({ language, voices }) {
             </Button>
             <Divider sx={{ borderColor: '#444', mb: 2 }} />
             <List>
-              <ListItem disablePadding>
+              {/* <ListItem disablePadding>
                 <ListItemText primary="Languages" />
-              </ListItem>
+              </ListItem> */}
               <LanguageBord />
-              <ListItem disablePadding>
+              <Divider sx={{ borderColor: '#444', mb: 2 }} />
+              {/* <ListItem disablePadding>
                 <ListItemText primary="Voice" />
-              </ListItem>
+              </ListItem> */}
               <VoiceSelector
                 selectedVoice={selectedVoice}
                 handleVoiceChange={handleVoiceChange}
                 voices={voices}
               />
-              <ListItem disablePadding>
+              <Divider sx={{ borderColor: '#444', mb: 2 }} />
+              {/* <ListItem disablePadding>
                 <ListItemText primary="Format" />
-              </ListItem>
+              </ListItem> */}
               {/* <FormatSelector
                 responseFormat={responseFormat}
                 handleFormatChange={handleFormatChange}
               /> */}
             </List>
-
+<Divider sx={{ borderColor: '#444', mb: 2 }} />
             <Button
               variant="contained"
               color="primary"
@@ -253,12 +255,12 @@ export default function AudioGenerator({ language, voices }) {
               {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
             </Button>
 
-            
+            <Divider sx={{ borderColor: '#444', mb: 2 }} />
 
             {audioLinks.length > 0 && (
               <Box sx={{ mt: 3 }}>
                 <Typography variant="subtitle2" gutterBottom>
-                  🎵 Your Audios
+                  🎵 My speeches
                 </Typography>
                 {audioLinks.map((url, i) => (
                   <Box key={i} sx={{ my: 1 }}>
