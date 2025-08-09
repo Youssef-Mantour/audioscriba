@@ -20,16 +20,13 @@ export const Footer = () => {
       sx={{
         py: 0,
         px: 0,
-        mt:-2,
-        mb:-2,
+        mt: -2,
+        mb: -2,
         backgroundColor: "rgba(238, 236, 236, 1)",
       }}
     >
       <Container maxWidth="sm" sx={{ textAlign: "center" }}>
-      
         
-        
-
         <Stack direction="row" spacing={2} justifyContent="center" mt={0}>
           <IconButton
             component="a"
@@ -82,10 +79,40 @@ export const Footer = () => {
           </IconButton>
         </Stack>
 
-        <Typography variant="body1" color="text.secondary" align="center" mt={3}>
+        {/* Added links */}
+        <Stack
+          direction="row"
+          spacing={4}
+          justifyContent="center"
+          mt={3}
+          mb={1}
+        >
+          <Link href="/privacy-policy" passHref legacyBehavior>
+            <Typography
+              component="a"
+              variant="body2"
+              color="text.secondary"
+              sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              Privacy Policy
+            </Typography>
+          </Link>
+          <Link href="/terms-of-service" passHref legacyBehavior>
+            <Typography
+              component="a"
+              variant="body2"
+              color="text.secondary"
+              sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              Terms of Service
+            </Typography>
+          </Link>
+        </Stack>
+
+        <Typography variant="body1" color="text.secondary" align="center" mt={1}>
           Created by YoMa AI & Web Solutions
         </Typography>
-        <Typography variant="body2" color="text.secondary" align="center">
+        <Typography variant="body2" color="text.secondary" align="center" mb={2}>
           © {new Date().getFullYear()} All Rights Reserved
         </Typography>
       </Container>
