@@ -210,7 +210,16 @@ export default function AudioGenerator({ language, voices }) {
               sx={{ mb: 2 }}
             />
             <Divider sx={{ borderColor: '#444', mb: 2 }} />
-
+<Button
+              variant="outlined"
+              color="error"
+              onClick={handleLogout}
+              fullWidth
+              sx={{ mt: 1, color: '#fff', borderColor: '#ff4d4d' }}
+            >
+              Logout
+            </Button>
+            <Divider sx={{ borderColor: '#444', mb: 2 }} />
             <List>
               <ListItem disablePadding>
                 <ListItemText primary="Languages" />
@@ -227,10 +236,10 @@ export default function AudioGenerator({ language, voices }) {
               <ListItem disablePadding>
                 <ListItemText primary="Format" />
               </ListItem>
-              <FormatSelector
+              {/* <FormatSelector
                 responseFormat={responseFormat}
                 handleFormatChange={handleFormatChange}
-              />
+              /> */}
             </List>
 
             <Button
@@ -244,15 +253,7 @@ export default function AudioGenerator({ language, voices }) {
               {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
             </Button>
 
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={handleLogout}
-              fullWidth
-              sx={{ mt: 1, color: '#fff', borderColor: '#ff4d4d' }}
-            >
-              Logout
-            </Button>
+            
 
             {audioLinks.length > 0 && (
               <Box sx={{ mt: 3 }}>
