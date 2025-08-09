@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import {
   Box,
-  Typography,
   IconButton,
   Slider,
   Button,
-  Paper
+  Paper,
+  Typography
 } from "@mui/material";
 import { PlayArrow, Pause, VolumeUp, Download } from "@mui/icons-material";
 
@@ -59,62 +59,58 @@ export default function AudioPlayer({ audioUrl, responseFormat, audioRef }) {
     <Paper
       elevation={4}
       sx={{
-        p: 2,
+        p: 1.5,
         borderRadius: 3,
-        backgroundColor: "#ffffff",
-        maxWidth: 500,
+        backgroundColor: "#fff",
         width: "100%",
+        maxWidth: 800
       }}
     >
       <audio ref={audioRef} src={audioUrl} type={`audio/${responseFormat}`} />
 
-      <Typography variant="h6" sx={{ mb: 1 }}>
-        🎵 Audio Player
-      </Typography>
-
-      {/* Controls */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <IconButton onClick={togglePlay} color="primary" size="large">
-          {isPlaying ? <Pause fontSize="large" /> : <PlayArrow fontSize="large" />}
+        {/* Play/Pause */}
+        <IconButton onClick={togglePlay} color="primary">
+          {isPlaying ? <Pause /> : <PlayArrow />}
         </IconButton>
 
+        {/* Progress Bar */}
         <Slider
           value={progress}
           max={duration || 0}
           onChange={handleSeek}
-          sx={{ flex: 1 }}
+          sx={{ flex: 1, minWidth: 120 }}
         />
 
-        <Typography variant="body2" sx={{ minWidth: 50, textAlign: "right" }}>
+        {/* Time */}
+        <Typography variant="body2" sx={{ minWidth: 45, textAlign: "center" }}>
           {Math.floor(progress / 60)}:
           {String(Math.floor(progress % 60)).padStart(2, "0")}
         </Typography>
-      </Box>
 
-      {/* Volume Control */}
-      <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-        <VolumeUp sx={{ mr: 1 }} />
+        {/* Volume */}
+        <VolumeUp fontSize="small" />
         <Slider
           value={volume}
           onChange={handleVolumeChange}
           min={0}
           max={1}
           step={0.01}
-          sx={{ flex: 1 }}
+          sx={{ width: 80 }}
         />
-      </Box>
 
-      {/* Download Button */}
-      <Button
-        variant="contained"
-        color="secondary"
-        href={audioUrl}
-        download={`speech.${responseFormat}`}
-        startIcon={<Download />}
-        sx={{ mt: 2 }}
-      >
-        Download
-      </Button>
+        {/* Download */}
+        <Button
+          variant="contained"
+          color="secondary"
+          href={audioUrl}
+          download={`speech.${responseFormat}`}
+          startIcon={<Download />}
+          size="small"
+        >
+          Download
+        </Button>
+      </Box>
     </Paper>
   );
 }
