@@ -272,50 +272,52 @@ export default function AudioGenerator({ language, voices }) {
       </Box>
 
       {/* Main Content */}
-      <Box
-        sx={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          px: 3,
-          py: 4,
-          bgcolor: '#f9f9fb',
-        }}
-      >
-        <Typography
-          variant="h3"
-          sx={{
-            fontWeight: 'bold',
-            mb: 3,
-            color: '#333',
-          }}
-        >
-          Text to Speech Generator
-        </Typography>
+<Box
+  sx={{
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    px: 3,
+    py: 4,
+    bgcolor: '#f9f9fb',
+  }}
+>
+  <Typography
+    variant="h3"
+    sx={{
+      fontWeight: 'bold',
+      mb: 3,
+      color: '#333',
+    }}
+  >
+    Text to Speech Generator
+  </Typography>
 
-        <TextInput
-          inputText={inputText}
-          handleInputChange={handleInputChange}
-          sx={{ width: '100%', maxWidth: '800px' }}
-        />
+  <TextInput
+    inputText={inputText}
+    handleInputChange={handleInputChange}
+    fullWidth
+    sx={{ width: '100%' }} // now it stretches fully
+  />
 
-        {error && (
-          <Typography color="error" sx={{ mt: 2 }}>
-            {error}
-          </Typography>
-        )}
+  {error && (
+    <Typography color="error" sx={{ mt: 2 }}>
+      {error}
+    </Typography>
+  )}
 
-        {audioUrl && (
-          <Box sx={{ mt: 3 }}>
-            <AudioPlayer
-              audioUrl={audioUrl}
-              responseFormat={responseFormat}
-              audioRef={audioRef}
-            />
-          </Box>
-        )}
-      </Box>
+  {audioUrl && (
+    <Box sx={{ mt: 3 }}>
+      <AudioPlayer
+        audioUrl={audioUrl}
+        responseFormat={responseFormat}
+        audioRef={audioRef}
+      />
+    </Box>
+  )}
+</Box>
+
     </Box>
   );
 }
