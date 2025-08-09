@@ -43,7 +43,7 @@ export function Navigation({ toggleColorMode }) {
     { label: 'What is it', href: '/' },
     { label: 'Pricing', href: '/pricing' },
     { label: 'Dashboard', href: '/languages-board' },
-    { label: 'Contact', href: '/contact' },
+    //{ label: 'Contact', href: '/contact' },
   ];
 
   const handleSignIn = () => router.push('/login');
