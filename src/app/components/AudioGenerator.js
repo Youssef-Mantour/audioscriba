@@ -183,6 +183,7 @@ export default function AudioGenerator({ language, voices }) {
       <Box
         sx={{
           width: 280,
+          ml: 3,
           bgcolor: '#1e1e2f',
           color: '#fff',
           p: 3,
