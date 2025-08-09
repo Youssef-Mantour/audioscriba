@@ -269,7 +269,19 @@ export default function AudioGenerator({ language, voices }) {
         pr: 1, // padding right to avoid scrollbar overlap
       }}
     >
-      {audioLinks.slice(0, 5).map((url, i) => (
+      {audioLinks.length > 0 && (
+  <Box sx={{ mt: 3 }}>
+    <Typography variant="subtitle2" gutterBottom>
+      🎵 My speeches
+    </Typography>
+    <Box
+      sx={{
+        maxHeight: 200,  // container height shows about 5 items
+        overflowY: 'auto',
+        pr: 1,  // padding right for scrollbar space
+      }}
+    >
+      {audioLinks.map((url, i) => (
         <Box key={i} sx={{ my: 1 }}>
           <a
             href={url}
@@ -277,10 +289,14 @@ export default function AudioGenerator({ language, voices }) {
             rel="noopener noreferrer"
             style={{ color: '#4dabf7' }}
           >
-            Speech {i + 1}
+            Audio {i + 1}
           </a>
         </Box>
       ))}
+    </Box>
+  </Box>
+)}
+
     </Box>
   </Box>
 )}
