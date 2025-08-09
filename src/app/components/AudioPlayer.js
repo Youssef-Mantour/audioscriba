@@ -107,7 +107,7 @@ export default function AudioPlayer({ audioUrl, responseFormat, audioRef }) {
           download={`speech.${responseFormat}`}
           startIcon={<Download />}
           size="small"
-          sx={{ ml: 1, textTransform: "none" }
+          sx={{ ml: 1, textTransform: "none" }}
         >
           Download
         </Button>
