@@ -46,6 +46,7 @@ export default function TextInput({ inputText, handleInputChange }) {
         fullWidth
         multiline
         minRows={8}
+        maxRows={12}
         value={inputText}
         onChange={handleInputChange}
         variant="outlined"
