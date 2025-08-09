@@ -178,9 +178,10 @@ export default function AudioGenerator({ language, voices }) {
       {/* Sidebar */}
       <Box
         sx={{
+          overflowY: 'auto',
           width: 280,
           ml: 3,
-          bgcolor: '#1e1e2f',
+          bgcolor: '#5da981ff',
           color: '#fff',
           p: 3,
           display: 'flex',
@@ -193,7 +194,7 @@ export default function AudioGenerator({ language, voices }) {
         {/* Scrollable container inside sidebar */}
         <Box
           sx={{
-            overflowY: 'auto',
+            
             flexGrow: 1,
             pr: 1, // padding right for scrollbar space
           }}
