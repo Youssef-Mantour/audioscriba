@@ -7,6 +7,10 @@ import {
   Typography,
   Box,
   Chip,
+  Divider,
+  List,
+  ListItem,
+  ListItemText
 } from '@mui/material';
 import VoiceSelector from '../components/VoiceSelector';
 import FormatSelector from '../components/FormatSelector';
@@ -40,8 +44,6 @@ export default function AudioGenerator({ language, voices }) {
 
     if (!error && data) {
       setAudioLinks(data.map((d) => d.url));
-    } else {
-      console.error('Error fetching audio links:', error);
     }
   };
 
@@ -52,7 +54,6 @@ export default function AudioGenerator({ language, voices }) {
         .select('total_credits, used_credits')
         .eq('user_id', userId)
         .single();
-
       if (!error && data) {
         setCredits((data.total_credits ?? 0) - (data.used_credits ?? 0));
       } else {
@@ -96,7 +97,6 @@ export default function AudioGenerator({ language, voices }) {
   const uploadAudioToSupabase = async (audioBlob, userId) => {
     const fileName = `audio-${Date.now()}.${responseFormat}`;
     const filePath = `${userId}/${fileName}`;
-
     const { error: uploadError } = await supabase.storage
       .from('audios')
       .upload(filePath, audioBlob, {
@@ -104,21 +104,12 @@ export default function AudioGenerator({ language, voices }) {
         upsert: true,
         contentType: `audio/${responseFormat}`,
       });
-
-    if (uploadError) {
-      console.error('Upload error:', uploadError);
-      return null;
-    }
+    if (uploadError) return null;
 
     const { data: signedUrlData, error: signedUrlError } = await supabase.storage
       .from('audios')
       .createSignedUrl(filePath, 60 * 60);
-
-    if (signedUrlError) {
-      console.error('Signed URL error:', signedUrlError);
-      return null;
-    }
-
+    if (signedUrlError) return null;
     return signedUrlData?.signedUrl ?? null;
   };
 
@@ -129,11 +120,9 @@ export default function AudioGenerator({ language, voices }) {
       audioRef.current.pause();
       audioRef.current.src = '';
     }
-
     setLoading(true);
     setError(null);
     setAudioUrl(null);
-
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error('You must be signed in');
@@ -145,13 +134,11 @@ export default function AudioGenerator({ language, voices }) {
         .select('total_credits, used_credits')
         .eq('user_id', userId)
         .single();
-
-      if (creditError) throw new Error('Could not fetch user credits: ' + creditError.message);
+      if (creditError) throw new Error('Could not fetch user credits');
 
       const totalCredits = creditRow?.total_credits ?? 0;
       const usedCredits = creditRow?.used_credits ?? 0;
       const availableCredits = totalCredits - usedCredits;
-
       if (availableCredits < characterCount) {
         throw new Error(`Insufficient credits. You have ${availableCredits} characters left but your text has ${characterCount}.`);
       }
@@ -161,7 +148,6 @@ export default function AudioGenerator({ language, voices }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ inputText: trimmed, selectedVoice, responseFormat, language }),
       });
-
       if (!res.ok) {
         const { error: msg } = await res.json();
         throw new Error(msg || 'Failed to generate audio');
@@ -180,13 +166,9 @@ export default function AudioGenerator({ language, voices }) {
 
       const signedUrl = await uploadAudioToSupabase(audioBlob, userId);
       if (signedUrl) {
-        await supabase
-          .from('user_audios')
-          .insert([{ user_id: userId, url: signedUrl }]);
-
+        await supabase.from('user_audios').insert([{ user_id: userId, url: signedUrl }]);
         setAudioLinks((prev) => [signedUrl, ...prev]);
       }
-
     } catch (err) {
       setError(err.message);
     } finally {
@@ -195,59 +177,58 @@ export default function AudioGenerator({ language, voices }) {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%', mt: 10 }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%' }}>
+      
       {/* Sidebar */}
       <Box
         sx={{
-          width: '300px',
-          bgcolor: '#f5f5f5',
+          width: 280,
+          bgcolor: '#1e1e2f',
+          color: '#fff',
           p: 3,
-          borderRight: '1px solid #ddd',
-          m: 2,
-          overflowY: 'auto',
-          borderRadius: 2,
-          boxShadow: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          borderRight: '1px solid #333',
         }}
       >
-        <Typography variant="h6" gutterBottom>
-          Welcome
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
+          🎤 Audio Dashboard
         </Typography>
+        <Divider sx={{ borderColor: '#444', mb: 2 }} />
 
         {user ? (
           <>
-            <Typography variant="body2" gutterBottom>
-              <strong>Email:</strong> {user.email}
+            <Typography variant="body2" sx={{ mb: 1 }}>
+              {user.email}
             </Typography>
+            <Chip
+              label={`💎 ${credits !== null ? credits : 'Loading...'}`}
+              color="secondary"
+              sx={{ mb: 2 }}
+            />
+            <Divider sx={{ borderColor: '#444', mb: 2 }} />
 
-            {user.user_metadata?.full_name && (
-              <Typography variant="body2" gutterBottom>
-                <strong>Name:</strong> {user.user_metadata.full_name}
-              </Typography>
-            )}
-
-            <Box mt={2}>
-              <Typography variant="body2" gutterBottom>
-                <strong>Credits:</strong>
-              </Typography>
-              <Chip
-                label={`💎 ${credits !== null ? credits : 'Loading...'}`}
-                color="secondary"
-                sx={{ my: 1 }}
-              />
-            </Box>
-
-            <Box mt={2}>
+            <List>
+              <ListItem disablePadding>
+                <ListItemText primary="Languages" />
+              </ListItem>
               <LanguageBord />
+              <ListItem disablePadding>
+                <ListItemText primary="Voice" />
+              </ListItem>
               <VoiceSelector
                 selectedVoice={selectedVoice}
                 handleVoiceChange={handleVoiceChange}
                 voices={voices}
               />
+              <ListItem disablePadding>
+                <ListItemText primary="Format" />
+              </ListItem>
               <FormatSelector
                 responseFormat={responseFormat}
                 handleFormatChange={handleFormatChange}
               />
-            </Box>
+            </List>
 
             <Button
               variant="contained"
@@ -265,19 +246,19 @@ export default function AudioGenerator({ language, voices }) {
               color="error"
               onClick={handleLogout}
               fullWidth
-              sx={{ mt: 2 }}
+              sx={{ mt: 1, color: '#fff', borderColor: '#ff4d4d' }}
             >
               Logout
             </Button>
 
             {audioLinks.length > 0 && (
-              <Box mt={3}>
+              <Box sx={{ mt: 3, flexGrow: 1, overflowY: 'auto' }}>
                 <Typography variant="subtitle2" gutterBottom>
                   🎵 Your Audios
                 </Typography>
                 {audioLinks.map((url, i) => (
                   <Box key={i} sx={{ my: 1 }}>
-                    <a href={url} target="_blank" rel="noopener noreferrer">
+                    <a href={url} target="_blank" rel="noopener noreferrer" style={{ color: '#4dabf7' }}>
                       Audio {i + 1}
                     </a>
                   </Box>
@@ -298,12 +279,17 @@ export default function AudioGenerator({ language, voices }) {
           flexDirection: 'column',
           alignItems: 'center',
           px: 3,
-          mt: 4,
+          py: 4,
+          bgcolor: '#f9f9fb',
         }}
       >
         <Typography
-          variant="h2"
-          sx={{ fontFamily: 'Dancing Script, cursive', fontWeight: 'bold', mb: 3 }}
+          variant="h3"
+          sx={{
+            fontWeight: 'bold',
+            mb: 3,
+            color: '#333',
+          }}
         >
           Text to Speech Generator
         </Typography>
