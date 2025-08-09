@@ -32,15 +32,29 @@ export default function TextInput({ inputText, handleInputChange }) {
   };
 
   return (
-    <Paper elevation={10} sx={{ mb: 2, p: 2 }}>
+    <Paper
+      elevation={10}
+      sx={{
+        mb: 2,
+        p: 2,
+        width: "100%", // Full width of its container
+        maxWidth: "100%", // Prevents shrinking
+      }}
+    >
       <TextField
         label="Enter text"
         fullWidth
         multiline
-        rows={8}
+        minRows={8}
         value={inputText}
         onChange={handleInputChange}
         variant="outlined"
+        sx={{
+          width: "100%",
+          "& .MuiOutlinedInput-root": {
+            borderRadius: 2, // Dashboard look
+          },
+        }}
       />
       <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
         Characters: {inputText.length}
@@ -50,12 +64,21 @@ export default function TextInput({ inputText, handleInputChange }) {
         <DialogTitle>Large Input Warning</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Your input is over 1000 characters. Processing might take more time. Are you sure you want to continue?
+            Your input is over 1000 characters. Processing might take more time.
+            Are you sure you want to continue?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancel} color="error">Cancel</Button>
-          <Button onClick={handleConfirm} variant="contained" color="primary">Yes, Continue</Button>
+          <Button onClick={handleCancel} color="error">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleConfirm}
+            variant="contained"
+            color="primary"
+          >
+            Yes, Continue
+          </Button>
         </DialogActions>
       </Dialog>
     </Paper>
