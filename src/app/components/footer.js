@@ -48,15 +48,7 @@ export const Footer = () => {
             <LinkedInIcon />
           </IconButton>
 
-          <IconButton
-            component="a"
-            href="https://facebook.com/youssef.mantour"
-            target="_blank"
-            rel="noopener noreferrer"
-            color="primary"
-          >
-            <FacebookIcon />
-          </IconButton>
+          
 
           <IconButton
             component="a"
