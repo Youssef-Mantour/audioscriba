@@ -243,7 +243,7 @@ export default function AudioGenerator({ language, voices }) {
                 handleFormatChange={handleFormatChange}
               /> */}
             </List>
-<Divider sx={{ borderColor: '#444', mb: 2 }} />
+
             <Button
               variant="contained"
               color="primary"
@@ -258,19 +258,33 @@ export default function AudioGenerator({ language, voices }) {
             <Divider sx={{ borderColor: '#444', mb: 2 }} />
 
             {audioLinks.length > 0 && (
-              <Box sx={{ mt: 3 }}>
-                <Typography variant="subtitle2" gutterBottom>
-                  🎵 My speeches
-                </Typography>
-                {audioLinks.map((url, i) => (
-                  <Box key={i} sx={{ my: 1 }}>
-                    <a href={url} target="_blank" rel="noopener noreferrer" style={{ color: '#4dabf7' }}>
-                      Audio {i + 1}
-                    </a>
-                  </Box>
-                ))}
-              </Box>
-            )}
+  <Box sx={{ mt: 3 }}>
+    <Typography variant="subtitle2" gutterBottom>
+      🎵 My speeches
+    </Typography>
+    <Box
+      sx={{
+        maxHeight: 200, // adjust height as needed
+        overflowY: 'auto',
+        pr: 1, // padding right to avoid scrollbar overlap
+      }}
+    >
+      {audioLinks.slice(0, 5).map((url, i) => (
+        <Box key={i} sx={{ my: 1 }}>
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#4dabf7' }}
+          >
+            Speech {i + 1}
+          </a>
+        </Box>
+      ))}
+    </Box>
+  </Box>
+)}
+
           </>
         ) : (
           <Typography variant="body2">Not signed in</Typography>
