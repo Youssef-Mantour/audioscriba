@@ -191,7 +191,7 @@ export default function AudioGenerator({ language, voices }) {
           borderRight: '1px solid #333',
           height: '100vh',       // Full viewport height
           overflowY: 'auto',     // Independent scrolling
-          borderRadius: '0 3px 3px 0', // Rounded corners
+          borderRadius: '5px 5px 5px 5px', // Rounded corners
         }}
       >
         <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
