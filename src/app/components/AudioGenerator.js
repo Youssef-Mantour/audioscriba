@@ -270,14 +270,14 @@ export default function AudioGenerator({ language, voices }) {
       }}
     >
       {audioLinks.length > 0 && (
-  <Box sx={{ mt: 3 }}>
+  <Box sx={{ mt: 1 }}>
     <Typography variant="subtitle2" gutterBottom>
       🎵 My speeches
     </Typography>
     <Box
       sx={{
         maxHeight: 200,  // container height shows about 5 items
-        overflowY: 'auto',
+       // overflowY: 'auto',
         pr: 1,  // padding right for scrollbar space
       }}
     >
