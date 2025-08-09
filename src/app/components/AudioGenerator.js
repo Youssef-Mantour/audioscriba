@@ -9,11 +9,8 @@ import {
   Chip,
   Divider,
   List,
-  ListItem,
-  ListItemText
 } from '@mui/material';
 import VoiceSelector from '../components/VoiceSelector';
-import FormatSelector from '../components/FormatSelector';
 import TextInput from '../components/TextInput';
 import AudioPlayer from '../components/AudioPlayer';
 import LanguageBord from '@/languages-board/page';
@@ -92,7 +89,6 @@ export default function AudioGenerator({ language, voices }) {
 
   const handleInputChange = (e) => setInputText(e.target.value);
   const handleVoiceChange = (v) => setSelectedVoice(v);
-  const handleFormatChange = (e) => setResponseFormat(e.target.value);
 
   const uploadAudioToSupabase = async (audioBlob, userId) => {
     const fileName = `audio-${Date.now()}.${responseFormat}`;
@@ -177,7 +173,7 @@ export default function AudioGenerator({ language, voices }) {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%',mt:10 }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%', mt: 10 }}>
       
       {/* Sidebar */}
       <Box
@@ -190,120 +186,100 @@ export default function AudioGenerator({ language, voices }) {
           display: 'flex',
           flexDirection: 'column',
           borderRight: '1px solid #333',
-          height: '100vh',       // Full viewport height
-          overflowY: 'auto',     // Independent scrolling
-          borderRadius: '10px 10px 10px 10px', // Rounded corners
+          borderRadius: '10px', // Rounded corners all around
+          maxHeight: 'calc(100vh - 80px)', // Adjust to fit with top margin/padding
         }}
       >
-        <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
-          🎤 Speech Dashboard
-        </Typography>
-        <Divider sx={{ borderColor: '#444', mb: 2 }} />
+        {/* Scrollable container inside sidebar */}
+        <Box
+          sx={{
+            overflowY: 'auto',
+            flexGrow: 1,
+            pr: 1, // padding right for scrollbar space
+          }}
+        >
+          <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
+            🎤 Speech Dashboard
+          </Typography>
+          <Divider sx={{ borderColor: '#444', mb: 2 }} />
 
-        {user ? (
-          <>
-            <Typography variant="body2" sx={{ mb: 1 }}>
-              {user.email}
-            </Typography>
-            <Chip
-              label={`💎 ${credits !== null ? credits : 'Loading...'}`}
-              color="secondary"
-              sx={{ mb: 2 }}
-            />
-            <Divider sx={{ borderColor: '#444', mb: 2 }} />
-<Button
-              variant="outlined"
-              color="error"
-              onClick={handleLogout}
-              fullWidth
-              sx={{ mt: 1, color: '#fff', borderColor: '#ff4d4d' }}
-            >
-              Logout
-            </Button>
-            <Divider sx={{ borderColor: '#444', mb: 2 }} />
-            <List>
-              {/* <ListItem disablePadding>
-                <ListItemText primary="Languages" />
-              </ListItem> */}
-              <LanguageBord />
-              <Divider sx={{ borderColor: '#444', mb: 2 }} />
-              {/* <ListItem disablePadding>
-                <ListItemText primary="Voice" />
-              </ListItem> */}
-              <VoiceSelector
-                selectedVoice={selectedVoice}
-                handleVoiceChange={handleVoiceChange}
-                voices={voices}
+          {user ? (
+            <>
+              <Typography variant="body2" sx={{ mb: 1 }}>
+                {user.email}
+              </Typography>
+              <Chip
+                label={`💎 ${credits !== null ? credits : 'Loading...'}`}
+                color="secondary"
+                sx={{ mb: 2 }}
               />
               <Divider sx={{ borderColor: '#444', mb: 2 }} />
-              {/* <ListItem disablePadding>
-                <ListItemText primary="Format" />
-              </ListItem> */}
-              {/* <FormatSelector
-                responseFormat={responseFormat}
-                handleFormatChange={handleFormatChange}
-              /> */}
-            </List>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={handleLogout}
+                fullWidth
+                sx={{ mt: 1, color: '#fff', borderColor: '#ff4d4d' }}
+              >
+                Logout
+              </Button>
+              <Divider sx={{ borderColor: '#444', mb: 2 }} />
+              <List>
+                <LanguageBord />
+                <Divider sx={{ borderColor: '#444', mb: 2 }} />
+                <VoiceSelector
+                  selectedVoice={selectedVoice}
+                  handleVoiceChange={handleVoiceChange}
+                  voices={voices}
+                />
+                <Divider sx={{ borderColor: '#444', mb: 2 }} />
+              </List>
 
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={generateAndPlayAudio}
-              disabled={loading}
-              fullWidth
-              sx={{ mt: 2 }}
-            >
-              {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
-            </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={generateAndPlayAudio}
+                disabled={loading}
+                fullWidth
+                sx={{ mt: 2 }}
+              >
+                {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
+              </Button>
 
-            <Divider sx={{ borderColor: '#444', mb: 2 }} />
+              <Divider sx={{ borderColor: '#444', mb: 2 }} />
 
-            {audioLinks.length > 0 && (
-  <Box sx={{ mt: 3 }}>
-    <Typography variant="subtitle2" gutterBottom>
-      🎵 My speeches
-    </Typography>
-    <Box
-      sx={{
-        maxHeight: 200, // adjust height as needed
-        overflowY: 'auto',
-        pr: 1, // padding right to avoid scrollbar overlap
-      }}
-    >
-      {audioLinks.length > 0 && (
-  <Box sx={{ mt: 1 }}>
-    
-    <Box
-      sx={{
-        maxHeight: 200,  // container height shows about 5 items
-       // overflowY: 'auto',
-        pr: 1,  // padding right for scrollbar space
-      }}
-    >
-      {audioLinks.map((url, i) => (
-        <Box key={i} sx={{ my: 1 }}>
-          <a
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: '#4dabf7' }}
-          >
-            Speech {i + 1}
-          </a>
+              {audioLinks.length > 0 && (
+                <Box sx={{ mt: 3 }}>
+                  <Typography variant="subtitle2" gutterBottom>
+                    🎵 My speeches
+                  </Typography>
+                  <Box
+                    sx={{
+                      maxHeight: 200,
+                      overflowY: 'auto',
+                      pr: 1,
+                    }}
+                  >
+                    {audioLinks.map((url, i) => (
+                      <Box key={i} sx={{ my: 1 }}>
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: '#4dabf7' }}
+                        >
+                          Speech {i + 1}
+                        </a>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              )}
+            </>
+          ) : (
+            <Typography variant="body2">Not signed in</Typography>
+          )}
         </Box>
-      ))}
-    </Box>
-  </Box>
-)}
-
-    </Box>
-  </Box>
-)}
-
-          </>
-        ) : (
-          <Typography variant="body2">Not signed in</Typography>
-        )}
       </Box>
 
       {/* Main Content */}
