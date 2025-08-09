@@ -181,7 +181,7 @@ export default function AudioGenerator({ language, voices }) {
           overflow: 'scroll',
           width: 280,
           ml: 3,
-          bgcolor: '#033119ff',
+          bgcolor: '#155f39ff',
           color: '#fff',
           p: 3,
           display: 'flex',
