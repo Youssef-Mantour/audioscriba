@@ -178,10 +178,10 @@ export default function AudioGenerator({ language, voices }) {
       {/* Sidebar */}
       <Box
         sx={{
-          // overflow: 'auto',
+          overflow: 'scroll',
           width: 280,
           ml: 3,
-          bgcolor: '#c2d3caff',
+          bgcolor: '#033119ff',
           color: '#fff',
           p: 3,
           display: 'flex',
