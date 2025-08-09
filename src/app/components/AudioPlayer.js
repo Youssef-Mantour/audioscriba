@@ -64,7 +64,7 @@ export default function AudioPlayer({ audioUrl, responseFormat, audioRef }) {
         backgroundColor: "#fff",
         width: "100%",
         maxWidth: 800,
-        mt:3,
+        mt:1,
       }}
     >
       <audio ref={audioRef} src={audioUrl} type={`audio/${responseFormat}`} />

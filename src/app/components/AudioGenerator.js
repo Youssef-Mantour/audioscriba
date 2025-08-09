@@ -177,7 +177,7 @@ export default function AudioGenerator({ language, voices }) {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%',mt:10 }}>
       
       {/* Sidebar */}
       <Box
