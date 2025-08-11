@@ -172,6 +172,48 @@ export default function AudioGenerator({ language, voices }) {
     }
   };
 
+
+  const generateAndPlayAudioDemo = async () => {
+  const trimmed = inputText.trim();
+  if (!trimmed) return setError('Please enter some text.');
+
+  if (audioRef.current) {
+    audioRef.current.pause();
+    audioRef.current.src = '';
+  }
+
+  setLoading(true);
+  setError(null);
+  setAudioUrl(null);
+
+  try {
+    const res = await fetch('/api/generate-audio', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ inputText: trimmed, selectedVoice, responseFormat, language }),
+    });
+
+    if (!res.ok) {
+      const { error: msg } = await res.json();
+      throw new Error(msg || 'Failed to generate audio');
+    }
+
+    const buffer = await res.arrayBuffer();
+    const audioBlob = new Blob([buffer], { type: `audio/${responseFormat}` });
+    const localUrl = URL.createObjectURL(audioBlob);
+    setAudioUrl(localUrl);
+
+    // Optional: save audio somewhere if you still want
+    // const signedUrl = await uploadAudioToSupabase(audioBlob, 'anonymous');
+    // if (signedUrl) setAudioLinks(prev => [signedUrl, ...prev]);
+
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%', mt: 10 }}>
       
@@ -328,6 +370,18 @@ export default function AudioGenerator({ language, voices }) {
             />
           </Box>
         )}
+
+        <Button
+                variant="contained"
+                color="primary"
+                onClick={generateAndPlayAudioDemo}
+                disabled={loading}
+                
+                sx={{ mt: 2 }}
+              >
+                {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
+              </Button>
+
       </Box>
     </Box>
   );
