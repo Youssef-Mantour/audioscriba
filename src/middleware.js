@@ -7,8 +7,8 @@ export async function middleware(request) {
 
 export const config = {
   matcher: [
-    '/languages-board/:path*',
-    '/audio/:path*',
+    //'/languages-board/:path*',
+    //'/audio/:path*',
     /*
      * Match all request paths except those starting with:
      * - _next/static  (static files)
