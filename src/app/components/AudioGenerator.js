@@ -65,13 +65,12 @@ export default function AudioGenerator({ language, voices }) {
         fetchCredits(userId);
         fetchAudioLinks(userId);
 
-        // ✅ Subscribe to realtime changes for this user's credits
         const channel = supabase
           .channel('user_credits_changes')
           .on(
             'postgres_changes',
             {
-              event: '*', // listen to inserts & updates
+              event: '*',
               schema: 'public',
               table: 'user_credits',
               filter: `user_id=eq.${userId}`,
@@ -196,7 +195,49 @@ export default function AudioGenerator({ language, voices }) {
     }
   };
 
+  // ✅ Fixed return with proper JSX
   return (
-    // ... keep your JSX exactly the same
+    <Box p={4}>
+      <Typography variant="h4" gutterBottom>
+        Audio Generator
+      </Typography>
+
+      {session && (
+        <Button onClick={handleLogout} variant="outlined" color="secondary">
+          Logout
+        </Button>
+      )}
+
+      <TextInput value={inputText} onChange={handleInputChange} placeholder="Enter text to generate audio" />
+
+      <VoiceSelector voices={voices} selected={selectedVoice} onChange={handleVoiceChange} />
+
+      <Button
+        onClick={generateAndPlayAudio}
+        variant="contained"
+        color="primary"
+        disabled={loading || !inputText}
+        startIcon={loading && <CircularProgress size={20} />}
+      >
+        Generate Audio
+      </Button>
+
+      {error && <Typography color="error">{error}</Typography>}
+
+      {audioUrl && <AudioPlayer ref={audioRef} src={audioUrl} />}
+
+      <Divider sx={{ my: 2 }} />
+
+      <Typography variant="h6">Your Previous Audios</Typography>
+      <List>
+        {audioLinks.map((url, idx) => (
+          <audio key={idx} controls src={url} style={{ width: '100%', marginBottom: '8px' }} />
+        ))}
+      </List>
+
+      <Box mt={4}>
+        <LanguageBord />
+      </Box>
+    </Box>
   );
 }
