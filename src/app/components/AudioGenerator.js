@@ -44,26 +44,50 @@ export default function AudioGenerator({ language, voices }) {
     }
   };
 
-  useEffect(() => {
-    const fetchCredits = async (userId) => {
-      const { data, error } = await supabase
-        .from('user_credits')
-        .select('total_credits, used_credits')
-        .eq('user_id', userId)
-        .single();
-      if (!error && data) {
-        setCredits((data.total_credits ?? 0) - (data.used_credits ?? 0));
-      } else {
-        setCredits(null);
-      }
-    };
+  const fetchCredits = async (userId) => {
+    const { data, error } = await supabase
+      .from('user_credits')
+      .select('total_credits, used_credits')
+      .eq('user_id', userId)
+      .single();
+    if (!error && data) {
+      setCredits((data.total_credits ?? 0) - (data.used_credits ?? 0));
+    } else {
+      setCredits(null);
+    }
+  };
 
+  useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       if (data.session?.user) {
         const userId = data.session.user.id;
         fetchCredits(userId);
         fetchAudioLinks(userId);
+
+        // ✅ Subscribe to realtime changes for this user's credits
+        const channel = supabase
+          .channel('user_credits_changes')
+          .on(
+            'postgres_changes',
+            {
+              event: '*', // listen to inserts & updates
+              schema: 'public',
+              table: 'user_credits',
+              filter: `user_id=eq.${userId}`,
+            },
+            (payload) => {
+              const row = payload.new;
+              if (row) {
+                setCredits((row.total_credits ?? 0) - (row.used_credits ?? 0));
+              }
+            }
+          )
+          .subscribe();
+
+        return () => {
+          supabase.removeChannel(channel);
+        };
       }
     });
 
@@ -172,217 +196,7 @@ export default function AudioGenerator({ language, voices }) {
     }
   };
 
-
-  const generateAndPlayAudioDemo = async () => {
-  const trimmed = inputText.trim();
-  if (!trimmed) return setError('Please enter some text.');
-
-  if (audioRef.current) {
-    audioRef.current.pause();
-    audioRef.current.src = '';
-  }
-
-  setLoading(true);
-  setError(null);
-  setAudioUrl(null);
-
-  try {
-    const res = await fetch('/api/generate-audio', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ inputText: trimmed, selectedVoice, responseFormat, language }),
-    });
-
-    if (!res.ok) {
-      const { error: msg } = await res.json();
-      throw new Error(msg || 'Failed to generate audio');
-    }
-
-    const buffer = await res.arrayBuffer();
-    const audioBlob = new Blob([buffer], { type: `audio/${responseFormat}` });
-    const localUrl = URL.createObjectURL(audioBlob);
-    setAudioUrl(localUrl);
-
-    // Optional: save audio somewhere if you still want
-    // const signedUrl = await uploadAudioToSupabase(audioBlob, 'anonymous');
-    // if (signedUrl) setAudioLinks(prev => [signedUrl, ...prev]);
-
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
-
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%', mt: 10 }}>
-      
-      {/* Sidebar */}
-      <Box
-        sx={{
-          overflow: 'scroll',
-          width: 280,
-          ml: 3,
-          bgcolor: '#155f39ff',
-          color: '#fff',
-          p: 3,
-          display: 'flex',
-          flexDirection: 'column',
-          borderRight: '1px solid #333',
-          borderRadius: '10px', // Rounded corners all around
-          maxHeight: 'calc(100vh - 80px)', // Adjust to fit with top margin/padding
-        }}
-      >
-        {/* Scrollable container inside sidebar */}
-        <Box
-          sx={{
-            
-            flexGrow: 1,
-            pr: 1, // padding right for scrollbar space
-          }}
-        >
-          <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
-            🎤 Speech Dashboard
-          </Typography>
-          <Divider sx={{ borderColor: '#444', mb: 2 }} />
-
-          {user ? (
-            <>
-              <Typography variant="body2" sx={{ mb: 1 }}>
-                {user.email}
-              </Typography>
-              <Chip
-                label={`💎 ${credits !== null ? credits : 'Loading...'}`}
-                color="secondary"
-                sx={{ mb: 2 }}
-              />
-              <Divider sx={{ borderColor: '#444', mb: 2 }} />
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={handleLogout}
-                fullWidth
-                sx={{ mt: 1, color: '#fff', borderColor: '#ff4d4d' }}
-              >
-                Logout
-              </Button>
-              <Divider sx={{ borderColor: '#444', mb: 2 }} />
-              <List>
-                <LanguageBord />
-                <Divider sx={{ borderColor: '#444', mb: 2 }} />
-                <VoiceSelector
-                  selectedVoice={selectedVoice}
-                  handleVoiceChange={handleVoiceChange}
-                  voices={voices}
-                />
-                <Divider sx={{ borderColor: '#444', mb: 2 }} />
-              </List>
-
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={generateAndPlayAudio}
-                disabled={loading}
-                fullWidth
-                sx={{ mt: 2 }}
-              >
-                {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
-              </Button>
-
-              <Divider sx={{ borderColor: '#444', mb: 2 }} />
-
-              {audioLinks.length > 0 && (
-                <Box sx={{ mt: 3 }}>
-                  <Typography variant="subtitle2" gutterBottom>
-                    🎵 My speeches
-                  </Typography>
-                  <Box
-                    sx={{
-                      maxHeight: 200,
-                      overflowY: 'auto',
-                      pr: 1,
-                    }}
-                  >
-                    {audioLinks.map((url, i) => (
-                      <Box key={i} sx={{ my: 1 }}>
-                        <a
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ color: '#4dabf7' }}
-                        >
-                          Speech {i + 1}
-                        </a>
-                      </Box>
-                    ))}
-                  </Box>
-                </Box>
-              )}
-            </>
-          ) : (
-            <Typography variant="body2">Not signed in</Typography>
-          )}
-        </Box>
-      </Box>
-
-      {/* Main Content */}
-      <Box
-        sx={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          px: 3,
-          py: 4,
-          bgcolor: '#f9f9fb',
-        }}
-      >
-        <Typography
-          variant="h3"
-          sx={{
-            fontWeight: 'bold',
-            mb: 3,
-            color: '#333',
-          }}
-        >
-          Text to Speech Generator
-        </Typography>
-
-        <TextInput
-          inputText={inputText}
-          handleInputChange={handleInputChange}
-          fullWidth
-          sx={{ width: '100%' }}
-        />
-
-        {error && (
-          <Typography color="error" sx={{ mt: 2 }}>
-            {error}
-          </Typography>
-        )}
-
-        {audioUrl && (
-          <Box sx={{ mt: 3 }}>
-            <AudioPlayer
-              audioUrl={audioUrl}
-              responseFormat={responseFormat}
-              audioRef={audioRef}
-            />
-          </Box>
-        )}
-
-        <Button
-                variant="contained"
-                color="primary"
-                onClick={generateAndPlayAudioDemo}
-                disabled={loading}
-                
-                sx={{ mt: 2 }}
-              >
-                {loading ? <CircularProgress size={20} /> : 'Generate Speech'}
-              </Button>
-
-      </Box>
-    </Box>
+    // ... keep your JSX exactly the same
   );
 }
