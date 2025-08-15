@@ -58,6 +58,7 @@ export default function AudioGenerator({ language, voices }) {
       }
     };
 
+    // 1️⃣ Get session and initial credits
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       if (data.session?.user) {
@@ -67,7 +68,8 @@ export default function AudioGenerator({ language, voices }) {
       }
     });
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
+    // 2️⃣ Listen to auth changes
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
       if (newSession?.user) {
         const userId = newSession.user.id;
@@ -79,7 +81,34 @@ export default function AudioGenerator({ language, voices }) {
       }
     });
 
-    return () => listener.subscription.unsubscribe();
+    // 3️⃣ Listen for realtime changes in user_credits
+    let channel;
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        channel = supabase
+          .channel('user_credits_changes')
+          .on(
+            'postgres_changes',
+            {
+              event: 'UPDATE',
+              schema: 'public',
+              table: 'user_credits',
+              filter: `user_id=eq.${user.id}`,
+            },
+            (payload) => {
+              const row = payload.new;
+              setCredits((row.total_credits ?? 0) - (row.used_credits ?? 0));
+            }
+          )
+          .subscribe();
+      }
+    });
+
+    // 4️⃣ Cleanup listeners
+    return () => {
+      authListener.subscription.unsubscribe();
+      if (channel) supabase.removeChannel(channel);
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -174,7 +203,6 @@ export default function AudioGenerator({ language, voices }) {
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%', mt: 10 }}>
-      
       {/* Sidebar */}
       <Box
         sx={{
@@ -187,18 +215,11 @@ export default function AudioGenerator({ language, voices }) {
           display: 'flex',
           flexDirection: 'column',
           borderRight: '1px solid #333',
-          borderRadius: '10px', // Rounded corners all around
-          maxHeight: 'calc(100vh - 80px)', // Adjust to fit with top margin/padding
+          borderRadius: '10px',
+          maxHeight: 'calc(100vh - 80px)',
         }}
       >
-        {/* Scrollable container inside sidebar */}
-        <Box
-          sx={{
-            
-            flexGrow: 1,
-            pr: 1, // padding right for scrollbar space
-          }}
-        >
+        <Box sx={{ flexGrow: 1, pr: 1 }}>
           <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
             🎤 Speech Dashboard
           </Typography>
@@ -254,13 +275,7 @@ export default function AudioGenerator({ language, voices }) {
                   <Typography variant="subtitle2" gutterBottom>
                     🎵 My speeches
                   </Typography>
-                  <Box
-                    sx={{
-                      maxHeight: 200,
-                      overflowY: 'auto',
-                      pr: 1,
-                    }}
-                  >
+                  <Box sx={{ maxHeight: 200, overflowY: 'auto', pr: 1 }}>
                     {audioLinks.map((url, i) => (
                       <Box key={i} sx={{ my: 1 }}>
                         <a
@@ -295,14 +310,7 @@ export default function AudioGenerator({ language, voices }) {
           bgcolor: '#f9f9fb',
         }}
       >
-        <Typography
-          variant="h3"
-          sx={{
-            fontWeight: 'bold',
-            mb: 3,
-            color: '#333',
-          }}
-        >
+        <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 3, color: '#333' }}>
           Text to Speech Generator
         </Typography>
 
