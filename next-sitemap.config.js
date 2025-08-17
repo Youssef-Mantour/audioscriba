@@ -3,11 +3,10 @@ const path = require("path");
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: "https://yourdomain.com", // <-- Replace with your domain
+  siteUrl: "https://txtvoxai.com", // <-- your domain
   generateRobotsTxt: true,
   sitemapSize: 5000,
-  
-  // Automatically include all pages from app/
+
   additionalPaths: async (config) => {
     const appDir = path.join(process.cwd(), "app");
 
@@ -24,22 +23,13 @@ module.exports = {
           }
         }
       }
+
       return pages;
     }
 
     const staticPages = getPages(appDir);
 
-    // Example: add dynamic routes from API
-    const dynamicPosts = await fetch("https://yourdomain.com/api/posts")
-      .then(res => res.json())
-      .catch(() => []);
-
-    const dynamicUrls = dynamicPosts.map(post => `/posts/${post.slug}`);
-
-    // Combine static + dynamic pages
-    const allPaths = [...staticPages, ...dynamicUrls];
-
-    // Transform into next-sitemap format
-    return allPaths.map(page => config.transform(config, page));
+    // No dynamic routes, just transform static pages
+    return staticPages.map(page => config.transform(config, page));
   },
 };
