@@ -1,0 +1,87 @@
+import { serve } from "https://deno.land/std@0.203.0/http/server.ts";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+// Initialize Supabase client with service role key
+const supabase = createClient(Deno.env.get("SUPABASE_URL"), Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"));
+// Lemon Squeezy API key from env (optional, not needed for this simple version)
+const LEMON_API_KEY = Deno.env.get("LEMON_SQUEEZY_API_KEY");
+serve(async (req)=>{
+  if (req.method !== "POST") {
+    return new Response("Method Not Allowed", {
+      status: 405
+    });
+  }
+  try {
+    const event = await req.json();
+    // Log the entire payload for debugging
+    console.log("Incoming Lemon event:", JSON.stringify(event, null, 2));
+    // Only handle order_created events
+    if (event.type !== "order_created") {
+      return new Response("Event type not handled", {
+        status: 200
+      });
+    }
+    // Safely get user email from possible payload paths
+    const userEmail = event.data?.customer?.email || event.data?.attributes?.customer_email;
+    if (!userEmail) {
+      console.error("No user email found in event payload:", event);
+      return new Response("No user email found", {
+        status: 400
+      });
+    }
+    const creditsToAdd = 1000000;
+    const transactionType = "purchase";
+    // 1. Find user by email
+    const { data: user, error: userError } = await supabase.from("users").select("id").eq("email", userEmail).single();
+    if (userError || !user) {
+      console.error("User not found:", userError);
+      return new Response("User not found", {
+        status: 404
+      });
+    }
+    const userId = user.id;
+    // 2. Upsert user_credits
+    const { data: creditData, error: creditError } = await supabase.from("user_credits").select("total_credits").eq("user_id", userId).single();
+    if (creditError && creditError.code !== "PGRST116") {
+      console.error("Error fetching user credits:", creditError);
+      return new Response("Failed to fetch credits", {
+        status: 500
+      });
+    }
+    const currentCredits = creditData?.total_credits ?? 0;
+    const newTotalCredits = currentCredits + creditsToAdd;
+    const { error: upsertError } = await supabase.from("user_credits").upsert({
+      user_id: userId,
+      total_credits: newTotalCredits,
+      updated_at: new Date().toISOString()
+    }, {
+      onConflict: "user_id"
+    });
+    if (upsertError) {
+      console.error("Error updating user credits:", upsertError);
+      return new Response("Failed to update credits", {
+        status: 500
+      });
+    }
+    // 3. Log transaction
+    const { error: insertTransError } = await supabase.from("credit_transactions").insert({
+      user_id: userId,
+      change: creditsToAdd,
+      type: transactionType,
+      created_at: new Date().toISOString()
+    });
+    if (insertTransError) {
+      console.error("Error inserting transaction:", insertTransError);
+      return new Response("Failed to log transaction", {
+        status: 500
+      });
+    }
+    return new Response("Credits updated and transaction logged", {
+      status: 200
+    });
+  } catch (err) {
+    console.error("Webhook error:", err);
+    return new Response("Bad Request", {
+      status: 400
+    });
+  }
+});
