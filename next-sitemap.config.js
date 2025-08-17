@@ -8,8 +8,7 @@ module.exports = {
   sitemapSize: 5000,
 
   additionalPaths: async (config) => {
-    const appDir = path.join(process.cwd(), "app");
-
+    const appDir = path.join(process.cwd(), "src", "app");
     function getPages(dir, parentPath = "") {
       const entries = fs.readdirSync(dir, { withFileTypes: true });
       let pages = [];
