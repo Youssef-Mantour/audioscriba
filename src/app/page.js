@@ -13,7 +13,7 @@ export default function HomePage() {
           Welcome to txtvoxai
         </Typography>
         <Typography variant="h6" color="text.secondary">
-          Turn any text into realistic, natural-sounding speech using our AI-powered TTS technology.
+          convert text to voice ... natural-sounding speech using our AI-powered TTS technology.
         </Typography>
       </Box>
 
