@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import Link from "next/link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -27,6 +28,7 @@ export const Footer = () => {
     >
       <Container maxWidth="sm" sx={{ textAlign: "center" }}>
         
+        {/* Social icons */}
         <Stack direction="row" spacing={2} justifyContent="center" mt={0}>
           <IconButton
             component="a"
@@ -47,8 +49,6 @@ export const Footer = () => {
           >
             <LinkedInIcon />
           </IconButton>
-
-          
 
           <IconButton
             component="a"
@@ -71,7 +71,7 @@ export const Footer = () => {
           </IconButton>
         </Stack>
 
-        {/* Added links */}
+        {/* Internal links */}
         <Stack
           direction="row"
           spacing={4}
@@ -79,28 +79,28 @@ export const Footer = () => {
           mt={3}
           mb={1}
         >
-          <Link href="/privacy-policy" passHref legacyBehavior>
-            <Typography
-              component="a"
-              variant="body2"
-              color="text.secondary"
-              sx={{ cursor: 'pointer', textDecoration: 'underline' }}
-            >
-              Privacy Policy
-            </Typography>
-          </Link>
-          <Link href="/terms-of-service" passHref legacyBehavior>
-            <Typography
-              component="a"
-              variant="body2"
-              color="text.secondary"
-              sx={{ cursor: 'pointer', textDecoration: 'underline' }}
-            >
-              Terms of Service
-            </Typography>
-          </Link>
+          <Typography
+            component={Link}
+            href="/privacy-policy"
+            variant="body2"
+            color="text.secondary"
+            sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+          >
+            Privacy Policy
+          </Typography>
+
+          <Typography
+            component={Link}
+            href="/terms-of-service"
+            variant="body2"
+            color="text.secondary"
+            sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+          >
+            Terms of Service
+          </Typography>
         </Stack>
 
+        {/* Footer text */}
         <Typography variant="body1" color="text.secondary" align="center" mt={1}>
           Created by YoMa AI & Web Solutions
         </Typography>

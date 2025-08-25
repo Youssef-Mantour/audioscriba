@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   Box,
   Container,
@@ -70,18 +71,23 @@ export default function PricingPage() {
               ))}
             </List>
 
-            <Button
-              variant="contained"
-              size="large"
-              sx={{
-                borderRadius: 2,
-                px: 6,
-                textTransform: "none",
-                fontWeight: "medium",
-              }}
-            >
-              Buy Now
-            </Button>
+
+
+<Link href="https://txtvoxai.lemonsqueezy.com/buy/01a05a78-1551-45af-a1e4-960506f86d87">
+  <Button
+    variant="contained"
+    size="large"
+    sx={{
+      borderRadius: 2,
+      px: 6,
+      textTransform: "none",
+      fontWeight: "medium",
+    }}
+  >
+    Buy Now
+  </Button>
+</Link>
+
           </Stack>
         </Paper>
       </Container>

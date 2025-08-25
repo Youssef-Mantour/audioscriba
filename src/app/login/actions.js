@@ -16,7 +16,7 @@ export async function login(formData) {
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    return redirect('/error');
+    return redirect('/errorlogin');
   }
 
   revalidatePath('/', 'layout');
@@ -27,19 +27,22 @@ export async function login(formData) {
 export async function signup(formData) {
   const supabase = await createClient();
 
-  const data = {
-    email: formData.get('email'),
-    password: formData.get('password'),
-  };
+  const email = formData.get('email');
+const password = formData.get('password');
 
-  const { error } = await supabase.auth.signUp(data);
+const { error } = await supabase.auth.signUp({
+  email,
+  password,
+});
 
-  if (error) {
-    return redirect('/error');
-  }
+if (error) {
+  console.error('Supabase signUp error:', error.message);
+  redirect('/error');
+}
 
-  revalidatePath('/', 'layout');
-  redirect('/');
+revalidatePath('/', 'layout');
+redirect('/');
+
 }
 
 // New: Google OAuth sign-in
