@@ -13,7 +13,7 @@ export default function HomePage() {
           Welcome to txtvoxai
         </Typography>
         <Typography variant="h6" color="text.secondary">
-          convert text to voice for Moroccan Arabic... natural-sounding speech using our AI-powered TTS technology.
+          convert text to voice for natural-sounding speech using our AI-powered TTS technology.
         </Typography>
       </Box>
 
@@ -41,7 +41,7 @@ export default function HomePage() {
       </Box>
 
       <Box textAlign="center">
-       <Link href="/login" passHref legacyBehavior>
+       <Link href="/login" >
   
     Get Started
   

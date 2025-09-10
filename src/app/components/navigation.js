@@ -74,17 +74,13 @@ export function Navigation({ toggleColorMode }) {
     >
       <Toolbar sx={{ justifyContent: 'space-between', mx: 1 }}>
         {/* Logo */}
-        <Typography
-          variant="h3"
-          sx={{
-            fontWeight: 'bold',
-            fontFamily: 'sans-serif',
-            color: theme.palette.text.primary,
-            fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' },
-          }}
-        >
-          <Link href="/">TxtVoxAI</Link>
-        </Typography>
+        <Link href="/">
+          <img
+            src="/logo.png"
+            alt="Logo"
+            style={{ width: '120px', height: 'auto', cursor: 'pointer' }}
+          />
+        </Link>
 
         {/* Mobile Menu Icon */}
         <IconButton
@@ -213,7 +209,7 @@ export function Navigation({ toggleColorMode }) {
           >
             {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
-        </Box>
+        </Box> 
       </Collapse>
     </AppBar>
   );

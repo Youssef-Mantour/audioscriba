@@ -53,7 +53,7 @@ export default function PricingPage() {
               1,000,000 Credits
             </Typography>
             <Typography variant="h5" color="text.secondary">
-              Only $7
+              Only $5
             </Typography>
 
             <List sx={{ width: "100%" }}>
