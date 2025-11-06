@@ -320,7 +320,6 @@ export default function AudioGenerator({ language, voices }) {
           fullWidth
           sx={{ width: '100%' }}
         />
-        <AudioPlayer audioUrl={audioUrl} />
 
         {error && (
           <Typography color="error" sx={{ mt: 2 }}>
