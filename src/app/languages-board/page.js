@@ -47,7 +47,7 @@ export default function LanguageBord() {
   const handleChange = (event) => {
     const selectedHref = event.target.value;
     setSelectedOption(selectedHref);
-    router.push(selectedHref);
+    router.push(selectedHref,{ shallow: true });
   };
 
   return (
