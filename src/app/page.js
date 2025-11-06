@@ -1,6 +1,6 @@
 "use client";
 
-import { Container, Typography, Button, Box, Link, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { Container, Typography, Box, Link, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export default function HomePage() {
