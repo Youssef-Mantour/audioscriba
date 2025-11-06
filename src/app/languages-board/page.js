@@ -3,51 +3,47 @@ import React, { useState, useEffect } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Flag from "react-world-flags";
 
 export default function LanguageBord() {
   const router = useRouter();
-  const pathname = usePathname(); // e.g., /languages-board
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentText = searchParams.get("text") || ""; // get current text from URL
   const [selectedOption, setSelectedOption] = useState("");
 
   const navItems = [
     {
       label: "American",
-      href: `/audio/en-us/${["michael", "george", "lewis", "bella", "emma", "nicole", "sarah", "isabella", "sky", "adam"]}`,
+      href: "/audio/en-us",
       country: "US",
     },
     {
       label: "British",
-      href: `/audio/en-br/${["alice", "emma", "isabella", "lily", "daniel", "fabel", "george", "lewis"]}`,
+      href: "/audio/en-br",
       country: "GB",
     },
-    { label: "French", href: `/audio/fr/${["siwis"]}`, country: "FR" },
-    { label: "Spanish", href: `/audio/es/${["dora", "alex", "noel"]}`, country: "ES" },
-    { label: "Italian", href: `/audio/it/${["sara", "nicola"]}`, country: "IT" },
-    { label: "Portuguese", href: `/audio/pt-br/${["clara", "tiago", "papai"]}`, country: "PT" },
-    { label: "Hindi", href: `/audio/hi/${["alpha", "beta", "omega", "psi"]}`, country: "IN" },
-    { label: "Chinese", href: `/audio/ch/${["xiaobei", "xiaoni", "xiaoxiao", "xiaoyi", "yunjian", "yunyang", "yunxia", "yunxi"]}`, country: "CN" },
-    { label: "Japanese", href: `/audio/ja/${["sakura", "kumo", "tebukuro", "nezumi", "gongitsune"]}`, country: "JP" },
+    { label: "French", href: "/audio/fr", country: "FR" },
+    { label: "Spanish", href: "/audio/es", country: "ES" },
+    { label: "Italian", href: "/audio/it", country: "IT" },
+    { label: "Portuguese", href: "/audio/pt-br", country: "PT" },
+    { label: "Hindi", href: "/audio/hi", country: "IN" },
+    { label: "Chinese", href: "/audio/ch", country: "CN" },
+    { label: "Japanese", href: "/audio/ja", country: "JP" },
   ];
 
-  // Redirect to American if on /languages-board
   useEffect(() => {
-    if (pathname === "/languages-board") {
-      const defaultRoute = navItems[0].href; // American
-      router.replace(defaultRoute);
-    } else {
-      const current = navItems.find((item) => item.href === pathname);
-      if (current) {
-        setSelectedOption(current.href);
-      }
-    }
+    const current = navItems.find((item) => pathname.startsWith(item.href));
+    if (current) setSelectedOption(current.href);
   }, [pathname]);
 
   const handleChange = (event) => {
     const selectedHref = event.target.value;
     setSelectedOption(selectedHref);
-    router.push(selectedHref,{ shallow: true });
+    // Keep current text in URL query
+    const newUrl = `${selectedHref}?text=${encodeURIComponent(currentText)}`;
+    router.push(newUrl, { shallow: true });
   };
 
   return (
