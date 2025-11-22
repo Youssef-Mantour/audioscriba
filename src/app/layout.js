@@ -26,25 +26,34 @@ export default function RootLayout({ children }) {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const [mode, setMode] = useState("light");
 
-  // Load theme mode & initialize GTM
+  // 💡 Helper: read cookie
+  const getCookie = (name) => {
+    if (typeof document === "undefined") return null;
+    const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+    return match ? match[2] : null;
+  };
+
+  // 🚀 Load theme from cookies or fallback
   useEffect(() => {
-    const savedMode = localStorage.getItem("themeMode");
+    const savedCookieTheme = getCookie("theme");
+
     const initialMode =
-      savedMode === "light" || savedMode === "dark"
-        ? savedMode
+      savedCookieTheme === "light" || savedCookieTheme === "dark"
+        ? savedCookieTheme
         : prefersDarkMode
         ? "dark"
         : "light";
 
     setMode(initialMode);
 
+    // Initialize GTM
     const GTM_ID = process.env.NEXT_PUBLIC_TM_ID;
     if (GTM_ID) TagManager.initialize({ gtmId: GTM_ID });
   }, [prefersDarkMode]);
 
-  // Persist theme mode
+  // 🍪 Save theme in cookies
   useEffect(() => {
-    localStorage.setItem("themeMode", mode);
+    document.cookie = `theme=${mode}; path=/; max-age=31536000; SameSite=Lax`;
   }, [mode]);
 
   const toggleTheme = () =>
@@ -56,8 +65,20 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable}`}
-        style={{ transition: "background-color .3s, color .3s" }}
+        style={{
+          transition: "background-color .35s ease, color .35s ease",
+          opacity: 0,
+          animation: "fadeIn .45s ease forwards",
+        }}
       >
+        <style>
+          {`
+            @keyframes fadeIn {
+              to { opacity: 1; }
+            }
+          `}
+        </style>
+
         <ThemeProvider theme={theme}>
           <CssBaseline />
 
@@ -78,7 +99,7 @@ export default function RootLayout({ children }) {
               py: 2,
               mt: 4,
               textAlign: "center",
-              transition: "background-color .3s, color .3s",
+              transition: "background-color .35s ease, color .35s ease",
             }}
           >
             <Footer />
