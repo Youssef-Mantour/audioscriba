@@ -78,7 +78,7 @@ export function Navigation({ toggleColorMode }) {
           <img
             src="/logo.png"
             alt="Logo"
-            style={{ width: '120px', height: '50px', cursor: 'pointer' }}
+            style={{ width: '90px', height: '50px', cursor: 'pointer' }}
           />
         </Link>
 
