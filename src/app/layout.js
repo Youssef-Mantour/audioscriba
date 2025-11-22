@@ -7,13 +7,12 @@ import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { getTheme } from "@/components/theme";
 
-//import Head from "next/head"; // ✅ add Head for SEO
 import {
   CssBaseline,
   Container,
   Box,
-  useMediaQuery,
   ThemeProvider,
+  useMediaQuery,
 } from "@mui/material";
 
 // Google Fonts
@@ -27,47 +26,43 @@ export default function RootLayout({ children }) {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const [mode, setMode] = useState("light");
 
-  // Initialize theme mode from localStorage or system preference
+  // Load theme mode & initialize GTM
   useEffect(() => {
     const savedMode = localStorage.getItem("themeMode");
-    if (savedMode === "light" || savedMode === "dark") {
-      setMode(savedMode);
-    } else {
-      setMode(prefersDarkMode ? "dark" : "light");
-    }
+    const initialMode =
+      savedMode === "light" || savedMode === "dark"
+        ? savedMode
+        : prefersDarkMode
+        ? "dark"
+        : "light";
+
+    setMode(initialMode);
 
     const GTM_ID = process.env.NEXT_PUBLIC_TM_ID;
-    if (GTM_ID) {
-      TagManager.initialize({ gtmId: GTM_ID });
-    }
+    if (GTM_ID) TagManager.initialize({ gtmId: GTM_ID });
   }, [prefersDarkMode]);
 
-  // Update localStorage when theme mode changes
+  // Persist theme mode
   useEffect(() => {
     localStorage.setItem("themeMode", mode);
   }, [mode]);
 
-  const toggleTheme = () => {
+  const toggleTheme = () =>
     setMode((prev) => (prev === "light" ? "dark" : "light"));
-  };
 
   const theme = getTheme(mode);
 
   return (
     <html lang="en">
-      
-
       <body
         className={`${geistSans.variable} ${geistMono.variable}`}
-        style={{ transition: "background-color 0.3s ease, color 0.3s ease" }}
+        style={{ transition: "background-color .3s, color .3s" }}
       >
         <ThemeProvider theme={theme}>
           <CssBaseline />
 
-          {/* Navigation with toggle */}
-          <Box>
-            <Navigation toggleColorMode={toggleTheme} mode={mode} />
-          </Box>
+          {/* Top Navigation */}
+          <Navigation toggleColorMode={toggleTheme} mode={mode} />
 
           {/* Main Content */}
           <Container maxWidth="lg" sx={{ mt: 0, minHeight: "80vh" }}>
@@ -81,9 +76,9 @@ export default function RootLayout({ children }) {
               backgroundColor: "primary.main",
               color: "white",
               py: 2,
-              textAlign: "center",
               mt: 4,
-              transition: "background-color 0.3s ease, color 0.3s ease",
+              textAlign: "center",
+              transition: "background-color .3s, color .3s",
             }}
           >
             <Footer />
