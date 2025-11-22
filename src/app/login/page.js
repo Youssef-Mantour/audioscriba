@@ -65,7 +65,7 @@ export default function LoginPage() {
       sx={{
         maxWidth: 360,
         mx: 'auto',
-        mt: 10,
+        mt: 15,
         p: 3,
         boxShadow: 3,
         borderRadius: 2,
