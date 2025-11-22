@@ -66,7 +66,7 @@ export function Navigation({ toggleColorMode }) {
   return (
     <AppBar
       position="fixed"
-      elevation={0}
+      elevation={3}
       sx={{
         backgroundColor: theme.palette.background.default,
         pt: 1,
@@ -78,7 +78,7 @@ export function Navigation({ toggleColorMode }) {
           <img
             src="/logo.png"
             alt="Logo"
-            style={{ width: '90px', height: '50px', cursor: 'pointer' }}
+            style={{ width: '90px', height: '50px', cursor:    'pointer' }}
           />
         </Link>
 
