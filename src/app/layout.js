@@ -65,7 +65,7 @@ export default function RootLayout({ children }) {
           <Navigation toggleColorMode={toggleTheme} mode={mode} />
 
           {/* Main Content */}
-          <Container maxWidth="lg" sx={{ mt: 0, minHeight: "80vh" }}>
+          <Container maxWidth="lg" sx={{ mt: 2, minHeight: "80vh" }}>
             {children}
           </Container>
 
