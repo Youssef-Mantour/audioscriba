@@ -66,7 +66,7 @@ export function Navigation({ toggleColorMode }) {
   return (
     <AppBar
       position="fixed"
-      elevation={1}
+      elevation={0}
       sx={{
         backgroundColor: theme.palette.background.default,
         pt: 1,
