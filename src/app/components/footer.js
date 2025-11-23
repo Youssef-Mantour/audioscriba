@@ -98,6 +98,24 @@ export const Footer = () => {
           >
             Terms of Service
           </Typography>
+          <Typography
+            component={Link}
+            href="/blog"
+            variant="body2"
+            color="text.secondary"
+            sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+          >
+            Blog
+          </Typography>
+          <Typography
+            component={Link}
+            href="/faq"
+            variant="body2"
+            color="text.secondary"
+            sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+          >
+            FAQ
+          </Typography>
         </Stack>
 
         {/* Footer text */}
